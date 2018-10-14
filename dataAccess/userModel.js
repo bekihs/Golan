@@ -9,17 +9,7 @@ const User = da.connection.define('users', {
   imageURL: {
     type: Sequelize.STRING
   },
-  // father: {
-  //   type: Sequelize.STRING,
-  // },
-  // mother: {
-  //   type: Sequelize.STRING,
-  // }
+   
 });
-
-// User.belongsTo(User, { foreignKey: 'father' , as: "Father" })
-// User.belongsTo(User, { foreignKey: 'mother' , as:"Mother" })
-// User.hasMany(User, { foreignKey: 'father' , as: "ChildrenFather" })
-// User.hasMany(User, { foreignKey: 'mother' , as: "ChildrenMother" }) 
-
+ 
 module.exports = User;
