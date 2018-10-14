@@ -10,7 +10,7 @@ class UserBoxs extends Component {
     console.log(this.props.store.user)
     if(this.props.store.user){
     return (
-      <UserBox user={this.props.store.user} />
+      <UserBox searchUser={this.props.store.searchUser} user={this.props.store.user} />
     );
   }
   else{
