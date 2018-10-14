@@ -1,8 +1,15 @@
 import React, { Component } from 'react'; 
 import {observer, inject} from 'mobx-react';
+import { observable , action} from 'mobx';
+import AddForm from './AddForm'
  
-class UserBox extends Component {  
+@observer
+  class UserBox extends Component {  
+  @observable display =  false;
 
+  @action addChild=()=>{
+      this.display = !this.display;
+}
   changeUser=()=>{
     this.props.searchUser(this.props.user.userName);
   }
@@ -22,6 +29,8 @@ class UserBox extends Component {
       </div>
       <div className="children">
       {this.getChildren()}
+      <div classNae="addChild" onClick={this.addChild}>{!this.display?"+addChild":"hide"}</div>
+      {this.display? <AddForm parentName={this.props.user.userName}/> : null}
       </div>
       </div>
     );

@@ -8,16 +8,27 @@ router.post("/", (req, res) => {
 
     user.save().then((data) => {
         console.log(data);
-        res.send(data);
+        if (req.body.parentName){
+            userParent = UserParent.build({parentName:req.body.parentName , userName: data.userName});
+            userParent.save().then((data)=>{
+                getUserWithKids(req.body.parentName,res);   
+            }, (err) => {
+                console.error(err);
+                res.status(500).send(err); 
+            })
+        }
+        else
+         res.send(data);
     }, (err) => {
         console.error(err);
         res.status(500).send(err); 
     })
 
 })
-router.get("/down/:userName", (req, res) => {
+
+function getUserWithKids(userName, res){
     User.find({
-        where: { userName: req.params.userName },
+        where: { userName: userName },
         include: [
             {
                 model: UserParent,
@@ -33,7 +44,9 @@ router.get("/down/:userName", (req, res) => {
             console.error(err);
             res.status(500).send(err);
         })
-})
+}
+
+router.get("/down/:userName", (req,res)=>{getUserWithKids(req.params.userName, res)})
 
 router.get("/up/:userName", (req, res) => {
     User.find({
