@@ -15,7 +15,7 @@ import AddForm from './AddForm'
   }
   getChildren(){
     if (this.props.user.Children){
-      return this.props.user.Children.map((child)=><UserBox searchUser={this.props.searchUser} key={child.Child.userName} user={child.Child}/>);
+      return this.props.user.Children.map((child)=><UserBox searchUser={this.props.searchUser} key={child.userName} user={child}/>);
     }
     else 
     return [];
@@ -29,7 +29,7 @@ import AddForm from './AddForm'
       </div>
       <div className="children">
       {this.getChildren()}
-      <div classNae="addChild" onClick={this.addChild}>{!this.display?"+addChild":"hide"}</div>
+      <div className="addChild" onClick={this.addChild}>{!this.display?"+addChild":"hide"}</div>
       {this.display? <AddForm parentName={this.props.user.userName}/> : null}
       </div>
       </div>

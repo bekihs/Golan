@@ -31,10 +31,13 @@ function getUserWithKids(userName, res){
         where: { userName: userName },
         include: [
             {
-                model: UserParent,
+                model: User,
                  as: "Children",
-                include: [{model:User,  
-                as: "Child"}]
+                 include:{
+                     
+                model: User,
+                as: "Children"
+                 }
             }
         ]
     }).then(( user) => {
@@ -44,19 +47,19 @@ function getUserWithKids(userName, res){
             console.error(err);
             res.status(500).send(err);
         })
-}
-
+} 
 router.get("/down/:userName", (req,res)=>{getUserWithKids(req.params.userName, res)})
 
 router.get("/up/:userName", (req, res) => {
     User.find({
         where: { userName: req.params.userName },
         include: [
-            {
-                model: UserParent,
-                 as: "Parents",
-                include: [{model:User,  
-                as: "Parent"}]
+            { model:User,  
+                as: "Parents",
+                include:[
+                    {model:User,  
+                        as: "Parents"}
+                ]
             }
         ]
     }).then((user) => { 

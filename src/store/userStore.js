@@ -3,12 +3,10 @@ import { observable, computed, action, decorate } from "mobx";
 import axios from 'axios';
 
 class userStore{
-    @observable userName = "";
     @observable user = null;
 
     @action setupUser=(user , parentName)=>{
     if (!parentName || this.userName === user.data.userName){
-    this.userName = user.data.userName;
         this.user = user.data;
     }
     }
