@@ -28,11 +28,10 @@ class AddForm extends Component {
 
   render() {
     return (
-      <div className="login"> 
-        Username :
-          <input type="text" name="userName" onChange={this.inputChange} value={this.user.userName} />
-           <div>image URL: <input type="text" name="imageURL" onChange={this.inputChange} value={this.user.imageURL} /></div>
-          <button type="button" onClick={this.searchOrAdd}>Create</button>
+      <div className="form"> 
+          <input  className="formInput" type="text" placeholder="Name" name="userName" onChange={this.inputChange} value={this.user.userName} />
+           <div><input className="formInput" placeholder="Image URL" type="text" name="imageURL" onChange={this.inputChange} value={this.user.imageURL} /></div>
+          <input type="button" onClick={this.searchOrAdd} value="Create"></input>
       </div>
     );
   }

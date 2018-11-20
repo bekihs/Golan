@@ -23,14 +23,16 @@ import AddForm from './AddForm'
   render() {
     return (
       <div className="parentBox">
-        <span className="userName">{this.props.user.userName}</span>
-      <div className="userBox" onClick={this.changeUser}> 
+      <div className="userBox"> 
+      <img className="plusButton" onClick={this.changeUser} src={this.display ?"http://www.haipic.com/icon/4948/4948.png" :"http://icons.iconarchive.com/icons/hopstarter/soft-scraps/256/Button-Add-icon.png" }
+        onClick={this.addChild}></img>
         <img src={this.props.user.imageURL} className="userImage"/>
+        <span className="userName" onClick={this.changeUser}>{this.props.user.userName}</span>
+        
       </div>
+      {this.display? <AddForm parentName={this.props.user.userName}/> : null}
       <div className="children">
       {this.getChildren()}
-      <div className="addChild" onClick={this.addChild}>{!this.display?"+addChild":"hide"}</div>
-      {this.display? <AddForm parentName={this.props.user.userName}/> : null}
       </div>
       </div>
     );

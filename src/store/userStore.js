@@ -6,9 +6,26 @@ class userStore{
     @observable user = null;
 
     @action setupUser=(user , parentName)=>{
-    if (!parentName || this.userName === user.data.userName){
-        this.user = user.data;
+        user = user.data;
+    if (!parentName || this.userName === user.userName){
+        this.user = user;
     }
+    else{
+        this.setupChild(this.user.Children , user);
+    }
+    }
+
+    @action setupChild = (children , user)=>{
+        for (const i in children){
+            if (children[i].userName === user.userName){
+                children[i] = user;
+                return true;
+            }
+            if (this.setupChild(children[i].Children , user)){
+                return true;
+            }
+        }
+        return false;
     }
 
     @action searchUser = (userName) =>{
@@ -20,7 +37,8 @@ class userStore{
         if (parentName){
             user.parentName = parentName;
         }
-return axios.post("http://localhost:3001/users", user).then(action((user)=>{this.setupUser(user , parentName)}));
+return axios.post("http://localhost:3001/users", user).then(action((user)=>{
+    this.setupUser(user , parentName)}));
     }
 }
 

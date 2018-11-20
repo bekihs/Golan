@@ -17,11 +17,17 @@ code {
   margin:15px;
 }
 .userImage{
-  width:150px;
-  height: 150pxpx;
+  width:120px;
 }
 .children{
   display:flex;
   flex-wrap: wrap;
   justify-content: center;
+}
+
+.userName{
+  float:left;
+  width:90%;
+font-size: 18px;
+font-weight: bold;
 }

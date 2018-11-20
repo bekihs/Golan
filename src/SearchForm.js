@@ -22,10 +22,9 @@ class SearchForm extends Component {
 
   render() {
     return (
-      <div className="login"> 
-        Username :
-          <input type="text" name="userName" onChange={this.inputChange} value={this.userName} />
-          <button type="button" onClick={this.searchOrAdd}>Search</button>
+      <div className="form"> 
+          <input  className="formInput" type="text" placeholder="Name" name="userName" onChange={this.inputChange} value={this.userName} />
+         <input type="button" onClick={this.searchOrAdd} value="Search"></input>
       </div>
     );
   }

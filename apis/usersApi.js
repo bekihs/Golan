@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const User = require("../dataAccess/userModel");
 const UserParent = require("../dataAccess/userParent");
+const ParentModel = require("../dataAccess/ParentModel")
 
 router.post("/", (req, res) => {
 
@@ -69,5 +70,5 @@ router.get("/up/:userName", (req, res) => {
         res.status(500).send(err);
     })
 })
-
+ 
 module.exports = router;
