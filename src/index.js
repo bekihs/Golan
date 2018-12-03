@@ -1,19 +1,20 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import ReactDom from 'react-dom';
+import routes from './routes.js';
+import Master from './components/Master.jsx';
+import {renderRoutes } from 'react-router-config'
+import {BrowserRouter, Route, Link} from 'react-router-dom'
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-import store from './store/userStore';
-
-
-import { Provider } from 'mobx-react';
-
-ReactDOM.render(<Provider store={store}>
-                    <App />
-                </Provider>, document.getElementById('root'));
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: http://bit.ly/CRA-PWA
-serviceWorker.unregister();
+ReactDom.render((
+    
+  <MuiThemeProvider muiTheme={getMuiTheme()}>
+  <BrowserRouter><div>
+  <Master></Master>
+   {routes.childRoutes.map((route) => {
+        console.log(route);
+        return <Route key={route.path} {...route}/>
+    })}  </div>
+    </BrowserRouter></MuiThemeProvider>
+), document.getElementById('root'));
