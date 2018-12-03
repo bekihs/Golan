@@ -5,38 +5,26 @@ import {observer, inject} from 'mobx-react';
 import { Redirect } from 'react-router'
 
 
-@inject("store") 
+@inject("userStore") 
 @observer
 class LoginPage extends React.Component {
    
   constructor(props) {
     super(props);
-
-    // set the initial component state
-    this.state = {
-      errors: {},
+    this.state = { 
       user: {
         username: '',
         password: ''
       }
     };
- 
   }
  
    processForm = (event)=> {
     event.preventDefault();
- 
-    axios.post('http://localhost:3001/auth/login', this.state.user)
-      .then(res => {
-        this.setState({
-          errors: {} , user :res.data
-        });
-      }).catch(err => {
-          this.setState({errors: {message:  err.response? err.response.data.message :  err.data, stack:err.stack}});
-      });
+    this.props.userStore.login(this.state.user);
   }
   
-  geUser(event) {
+  changeUser=(event) =>{
     const field = event.target.name;
     const user = this.state.user;
     user[field] = event.target.value;
@@ -49,13 +37,13 @@ class LoginPage extends React.Component {
    * Render the component.
    */
   render() {
-       if (!this.state.user._id){
+       if (!this.props.userStore.user){
 
     return (
       <LoginForm
         onSubmit={this.processForm}
         onChange={this.changeUser}
-        errors={this.state.errors}
+        errors={this.props.userStore.errors}
         user={this.state.user}
       />
     );

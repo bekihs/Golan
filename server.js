@@ -57,30 +57,6 @@ app.use(express.static(path.join(__dirname, 'node_modules')));
 
 app.use(express.static('build'));
 
-
-
-// Add the auth routing
-app.use("/auth",authRouting);
-
-// Create authentication middleware
-var ensureAuthenticated = function(req, res, next) {
-  if (req.isAuthenticated()) {
-    return next();
-  } else {
-    return res.status('401').send({message: "Unauthorized" });
-  }
-};
-
-
-app.get('/currentuser', ensureAuthenticated, function(req, res) {
-  if (req.user) {
-    res.send(req.user.username)
-  } else {
-    res.send(null)  
-  }
-});
-
-
 app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.send({
@@ -89,7 +65,7 @@ app.use(function (err, req, res, next) {
   });
 });
 
-// app.get('*', (req, res)=>{
-//     res.sendFile(path.join(__dirname, '/build/index.html'));
-//   })
+app.get('*', (req, res)=>{
+    res.sendFile(path.join(__dirname, '/build/index.html'));
+  })
 app.listen(3001);

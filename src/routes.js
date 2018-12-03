@@ -1,4 +1,5 @@
 import HomePage from './pages/HomePage.jsx';
+import Entities from './pages/entities/Entities';
 import LoginPage from './pages/LoginPage.jsx';
 import CurrentUser from './pages/CurrentUser.jsx';
 import Registration from './pages/RegistrationPage.jsx';
@@ -26,6 +27,11 @@ const routes = {
     {
     path : '/profile',
     component: CurrentUser
+    },
+
+    {
+    path : '/entities/:name',
+    component: Entities
     }
   ]
 };
