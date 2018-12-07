@@ -3,6 +3,7 @@ import Entities from './pages/entities/Entities';
 import LoginPage from './pages/LoginPage.jsx';
 import CurrentUser from './pages/CurrentUser.jsx';
 import Registration from './pages/RegistrationPage.jsx';
+import DeliveryPage from './pages/entities/delivery/DeliveryPage.jsx';
 
 
 const routes = {
@@ -25,9 +26,13 @@ const routes = {
     },
 
     {
-    path : '/profile',
-    component: CurrentUser
-    },
+      path : '/profile',
+      component: CurrentUser
+      },
+      {
+      path : '/delivery',
+      component: DeliveryPage
+      },
 
     {
     path : '/entities/:name',

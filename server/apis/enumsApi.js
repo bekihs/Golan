@@ -35,7 +35,7 @@ router.post('/entityType', function(req, res, next) {
   })
  });
 
- router.post('/manufacturer', function(req, res, next) {
+ router.post('/manufacturers', function(req, res, next) {
  
   Manufacturer.create(req.body , function(err,result){
      if (err){
@@ -100,7 +100,7 @@ router.get('/driver', function(req, res, next) {
    })
   });
  
-  router.get('/manufacturer', function(req, res, next) {
+  router.get('/manufacturers', function(req, res, next) {
   
    Manufacturer.find({}  , function(err,result){
       if (err){
@@ -137,5 +137,137 @@ router.get('/driver', function(req, res, next) {
       })
      });
 
+
+
+     
+router.post('/driver/:id', function(req, res, next) {
+
+  Driver.findByIdAndUpdate(req.params.id,req.body , {new: true}, function(err,result){
+    if (err){
+      console.error(err);
+      res.status(500).send(err);
+    }
+    else{
+      res.send(result);
+    }
+  })
+ });
+ 
+ 
+ router.post('/entityType/:id', function(req, res, next) {
+ 
+   EntityType.findByIdAndUpdate(req.params.id,req.body ,  {new: true},function(err,result){
+     if (err){
+       console.error(err);
+       res.status(500).send(err);
+     }
+     else{
+       res.send(result);
+     }
+   })
+  });
+ 
+  router.post('/manufacturers/:id', function(req, res, next) {
+  
+   Manufacturer.findByIdAndUpdate(req.params.id,req.body , {new: true}, function(err,result){
+      if (err){
+        console.error(err);
+        res.status(500).send(err);
+      }
+      else{
+        res.send(result);
+      }
+    })
+   });
+   router.post('/milkman/:id', function(req, res, next) {
+   
+     Milkman.findByIdAndUpdate(req.params.id,req.body , {new: true}, function(err,result){
+       if (err){
+         console.error(err);
+         res.status(500).send(err);
+       }
+       else{
+         res.send(result);
+       }
+     })
+    });
+    router.post('/truck/:id', function(req, res, next) {
+    
+     Truck.findByIdAndUpdate(req.params.id,req.body , {new: true}, function(err,result){
+        if (err){
+          console.error(err);
+          res.status(500).send(err);
+        }
+        else{
+          res.send(result);
+        }
+      })
+     });
+ 
+     
+ router.delete('/driver/:id', function(req, res, next) {
+ 
+   Driver.findByIdAndRemove(req.params.id , function(err,result){
+     if (err){
+       console.error(err);
+       res.status(500).send(err);
+     }
+     else{
+       res.send(result);
+     }
+   })
+  });
+  
+  
+  router.delete('/entityType/:id', function(req, res, next) {
+  
+    EntityType.findByIdAndRemove(req.params.id , function(err,result){
+      if (err){
+        console.error(err);
+        res.status(500).send(err);
+      }
+      else{
+        res.send(result);
+      }
+    })
+   });
+  
+   router.delete('/manufacturers/:id', function(req, res, next) {
+   
+    Manufacturer.findByIdAndRemove(req.params.id  , function(err,result){
+       if (err){
+         console.error(err);
+         res.status(500).send(err);
+       }
+       else{
+         res.send(result);
+       }
+     })
+    });
+    router.delete('/milkman/:id', function(req, res, next) {
+    
+      Milkman.findByIdAndRemove(req.params.id , function(err,result){
+        if (err){
+          console.error(err);
+          res.status(500).send(err);
+        }
+        else{
+          res.send(result);
+        }
+      })
+     });
+     router.delete('/truck/:id', function(req, res, next) {
+     
+      Truck.findByIdAndRemove(req.params.id, function(err,result){
+         if (err){
+           console.error(err);
+           res.status(500).send(err);
+         }
+         else{
+           res.send(result);
+         }
+       })
+      });
+ 
  
 module.exports = router;

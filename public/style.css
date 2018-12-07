@@ -10,7 +10,22 @@ a {
   transition: color 0.4s;
   font-size: 24px;
 }
+.delivery{
+  color: #1184f0;
+  font-size: 26px;
 
+}
+.buttons{
+  cursor: pointer;
+  width: 35px !important;
+  height: 35px !important;
+  color:#5322e0;
+}
+.column .buttons{
+  width: 20px !important;
+  height: 20px !important;
+  color:#1976d2;
+}
 a:hover {
   color: #1976d2;
 }
@@ -65,4 +80,46 @@ a:hover {
 .success-message {
   padding: 0 16px;
   color: green;
+}
+
+.checkbox{
+  color:#5322e0 !important;
+}
+/* .table{
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 0 3em 0;
+  padding: 0;
+} */
+.table .row {
+  font-size: 20px;
+  font-family: Arial;
+  text-align: right;
+  border: solid 1px black;
+  padding: 10px;
+}
+/* .column{
+  box-sizing: border-box;
+  flex-grow: 1;
+  padding: 0.8em 1.2em;
+  overflow: hidden;  
+  list-style: none;
+  background: fade(slategrey,20%); 
+} */
+.table { display: table;direction: rtl;width:100%; border-collapse: collapse;}
+.row { display: table-row; }
+.column, .rTableHead { display: table-cell; }
+.table .name, .table .number{
+  font-size:26px;
+}
+.column1{
+  font-size: 16px;
+} 
+.popUp{
+  padding:25px;
+  direction: rtl;
+}
+
+.priceInput{
+  width:auto !important ;
 }

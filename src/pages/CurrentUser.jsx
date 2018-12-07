@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardTitle } from 'material-ui/Card';
 import {observer, inject} from 'mobx-react';
-import {  Link , NavLink} from 'react-router-dom';
+import {  Redirect } from 'react-router-dom';
 
 @inject("userStore") 
 @observer
@@ -14,7 +14,7 @@ class CurrentUser extends React.Component {
       </Card>) 
     }
     else{
-      return (<Link to="/login">Log in</Link>)
+      return (<Redirect to="/login"></Redirect>)
     }
   }
 }

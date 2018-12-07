@@ -3,13 +3,14 @@ const app = express();
 const path = require('path');
 var bodyParser = require('body-parser');
 const enumsApi = require("./server/apis/enumsApi");
+const DeliveryApi = require("./server/apis/DeliveryApi");
 
 const authRouting = require("./server/apis/authApi");
 var mongoose = require('mongoose');
 var expressSession = require('express-session');
 var passport = require('./server/models/passport');
 
-mongoose.connect('mongodb://localhost/golanApp');
+mongoose.connect('mongodb://1:Aa123456@ds127704.mlab.com:27704/golan');
 
 
 app.use(bodyParser.json({limit: '500kb'}));
@@ -44,6 +45,7 @@ var ensureAuthenticated = function(req, res, next) {
 // Add the auth routing
 app.use("/auth",authRouting);
 app.use("/api",ensureAuthenticated,enumsApi);
+app.use("/delivery",DeliveryApi);
 
 app.get('/currentuser', ensureAuthenticated, function(req, res) {
   if (req.user) {
