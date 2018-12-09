@@ -4,6 +4,7 @@ import LoginPage from './pages/LoginPage.jsx';
 import CurrentUser from './pages/CurrentUser.jsx';
 import Registration from './pages/RegistrationPage.jsx';
 import DeliveryPage from './pages/entities/delivery/DeliveryPage.jsx';
+import DeliveriesPage from './pages/entities/delivery/DeliveriesPage.jsx';
 
 
 const routes = {
@@ -32,6 +33,10 @@ const routes = {
       {
       path : '/delivery',
       component: DeliveryPage
+      },
+      {
+      path : '/deliveries',
+      component: DeliveriesPage
       },
 
     {

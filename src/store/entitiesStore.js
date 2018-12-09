@@ -4,7 +4,9 @@ import axios from 'axios';
 
 class entitiesStore {
     @observable entities = {};
+    @observable deliveries = [];
     @observable errors = {};
+    @observable searchObj = {};
     entitiesFields = {
         driver :{name:"נהג" , names:"נהגים" , fields: ["name" , "number"]},
         truck :{name:"משאית" , names:"משאיות" , fields:[ "number"]},
@@ -62,6 +64,16 @@ class entitiesStore {
     
     @action setError = (err) => {
         this.errors = { message: err.response ? err.response.data.message : err.data, stack: err.stack };
+    }
+
+    searchDeliveries = (entity)=>{
+        return axios.post('/delivery/search' , entity)
+        .then((result)=>{
+            runInAction(()=>{
+                this.searchObj = entity;
+                this.deliveries = (result.data);
+            })
+        }).catch(this.setError);
     }
 }
 

@@ -11,6 +11,7 @@ class Master  extends React.Component{
   getLinks(){
     if(this.props.userStore.user) {
       return(<div>
+        <Link to="/deliveries" className="delivery">משלוחים</Link>
         <Link to="/delivery" className="delivery">הוסף משלוח</Link>
         <Link to="/entities/driver">נהגים</Link>
       <Link to="/entities/truck">משאיות</Link>
