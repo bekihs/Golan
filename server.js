@@ -8,7 +8,7 @@ const DeliveryApi = require("./server/apis/DeliveryApi");
 const authRouting = require("./server/apis/authApi");
 var mongoose = require('mongoose');
 var expressSession = require('express-session');
-var passport = require('./server/models/passport');
+var passport = require('./server/models/Passport');
 
 mongoose.connect('mongodb://1:Aa123456@ds127704.mlab.com:27704/golan');
 
