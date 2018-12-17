@@ -6,7 +6,7 @@ var EntityType = require("../models/EntityTypeModel");
 var Manufacturer = require("../models/ManufacturerModel");
 var Milkman = require("../models/MilkmanModel");
 var Truck = require("../models/TrucksMoel");
-var Delivery = require("../models/Delivery");
+var Delivery = require("../models/delivery");
 
 //the '/users' routes will go here
 
@@ -52,7 +52,7 @@ router.get('/', function(req, res, next) {
  });
  
     
-router.post('/search', function(req, res, next) {
+router.post('/search/milkman', function(req, res, next) {
 if (req.body.fromDate || req.body.toDate){
   const  fromDate = req.body.fromDate ? new Date(req.body.fromDate) : new Date(1,1,1970)
   const  toDate = req.body.toDate ? new Date(req.body.toDate) : new Date(1,1,2400)
@@ -66,7 +66,7 @@ const groupObj =  {
   totalAmout: { $sum:  "$count"  },
   sumPrice: { $sum: { $multiply: [ "$price", "$count" ] } },
   price: { $avg: "$price" },
-  _id:{[req.body.grouping]: req.body.grouping }
+  _id: "$milkman" 
 };
  
 req.body.grouping = undefined;

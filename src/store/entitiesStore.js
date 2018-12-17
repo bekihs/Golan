@@ -69,24 +69,14 @@ class entitiesStore {
     }
 
     searchDeliveries = (entity)=>{
-        if (entity.grouping === "_id"){
 
-            axios.post("/delivery/get" , entity)
+            axios.post("/delivery/" + entity.grouping , entity)
             .then((result)=>{
                 runInAction(()=>{
                     this.searchObj = entity;
                     this.deliveries = (result.data);
                 })
             }).catch(this.setError);
-        }else{
-        return axios.post('/delivery/search' , entity)
-        .then((result)=>{
-            runInAction(()=>{
-                this.searchObj = entity;
-                this.deliveries = (result.data);
-            })
-        }).catch(this.setError);
-    }
 }
 }
 const store = new entitiesStore();
