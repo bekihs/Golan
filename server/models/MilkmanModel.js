@@ -7,7 +7,7 @@ const entityType = new Schema({
 })
 
 var MilkmanShema = new Schema({
-  name: String,
+  name:  { type : String , unique : true},
   prices :Schema.Types.Mixed,
   types:[]
 });

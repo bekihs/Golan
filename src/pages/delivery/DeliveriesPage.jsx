@@ -1,7 +1,6 @@
 import React  from 'react';
 import {observer, inject} from 'mobx-react';
 import { Redirect } from 'react-router'
-import Entity from '../Entity';
 import {observable} from "mobx"
 import DeliveryPage from './DeliveryPage';
 import SearchBar from './Search';

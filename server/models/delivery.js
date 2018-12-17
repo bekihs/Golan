@@ -12,7 +12,8 @@ var Delivery = new Schema({
   count :Schema.Types.Decimal128,
   date: Date,
   cerDel:String,
-  cerSell:String
+  cerSell:String,
+  isClose:Boolean
 });
 
 

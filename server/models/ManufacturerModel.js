@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var ManufacturerShema = new Schema({
-  name: String,
+  name:  { type : String , unique : true},
   isClose: Boolean,
   types:[]
 });

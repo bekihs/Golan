@@ -25,6 +25,7 @@ class entitiesStore {
         }).catch(this.setError);
     }
     createDelivery=(entity)=>{
+     
         axios.post("/delivery/" , entity)
         .then((result)=>{
             
@@ -40,6 +41,7 @@ class entitiesStore {
         }).catch(this.setError);
     }
     getItems = (entityName) => {
+        
         axios.get('/api/'+ entityName)
             .then((result)=>{
                 runInAction(()=>{
@@ -67,6 +69,16 @@ class entitiesStore {
     }
 
     searchDeliveries = (entity)=>{
+        if (entity.grouping === "_id"){
+
+            axios.post("/delivery/get" , entity)
+            .then((result)=>{
+                runInAction(()=>{
+                    this.searchObj = entity;
+                    this.deliveries = (result.data);
+                })
+            }).catch(this.setError);
+        }else{
         return axios.post('/delivery/search' , entity)
         .then((result)=>{
             runInAction(()=>{
@@ -76,6 +88,6 @@ class entitiesStore {
         }).catch(this.setError);
     }
 }
-
+}
 const store = new entitiesStore();
 export default store;

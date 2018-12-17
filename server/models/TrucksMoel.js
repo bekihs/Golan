@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var DriverShema = new Schema({
-  number: String
+  number:  { type : String , unique : true}
 });
 
 

@@ -27,6 +27,12 @@ class DeliveryPage extends React.Component {
                 this.entity.price = element.prices[this.entity.entityType];
         });
     }
+    if (e.target.name === "manufacturer"){
+      this.props.entitiesStore.entities.manufacturer.forEach(element => {
+        if (element.name === e.target.value)
+            this.entity.isClose = element.isClose;
+    });
+    }
   }
 
   @action ChangeCheckBox = (e)=>{

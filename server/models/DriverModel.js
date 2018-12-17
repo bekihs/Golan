@@ -2,8 +2,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var DriverShema = new Schema({
-  name: String,
-  number: String
+  name: { type : String , unique : true},
+  number: { type : String }
 });
 
 
