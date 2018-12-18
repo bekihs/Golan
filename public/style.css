@@ -113,6 +113,11 @@ a:hover {
   width: 300px;
   text-align: right;
 }
+
+.select{
+  width:270px;
+  text-align: right;
+}
 .table .name, .table .number{
   font-size:26px;
 }

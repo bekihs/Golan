@@ -68,6 +68,10 @@ a:hover {
   padding: 16px;
 }
 
+.select{
+  width:270px;
+  text-align: right;
+}
 .field-line, .button-line {
   padding: 16px;
 }
