@@ -10,7 +10,7 @@ var mongoose = require('mongoose');
 var expressSession = require('express-session');
 var passport = require('./server/models/Passport');
 
-mongoose.connect('mongodb://1:Aa123456@ds127704.mlab.com:27704/golan');
+mongoose.connect(process.env.mongod || 'mongodb://1:Aa123456@ds127704.mlab.com:27704/golan');
 
 
 app.use(bodyParser.json({limit: '500kb'}));

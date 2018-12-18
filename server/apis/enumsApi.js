@@ -4,6 +4,7 @@ var Driver = require("../models/DriverModel");
 var EntityType = require("../models/EntityTypeModel");
 var Manufacturer = require("../models/ManufacturerModel");
 var Milkman = require("../models/MilkmanModel");
+var Delivery = require("../models/delivery");
 var Truck = require("../models/TrucksMoel");
 
 //the '/users' routes will go here
@@ -36,7 +37,9 @@ router.post('/entityType', function(req, res, next) {
  });
 
  router.post('/manufacturers', function(req, res, next) {
- 
+ if(!req.body.isClose){
+   req.body.isClose = false;
+ }
   Manufacturer.create(req.body , function(err,result){
      if (err){
        console.error(err);
@@ -73,6 +76,18 @@ router.post('/entityType', function(req, res, next) {
     });
 
     
+router.get('/delivery', function(req, res, next) {
+
+  Delivery.find({}  , function(err,result){
+    if (err){
+      console.error(err);
+      res.status(500).send(err);
+    }
+    else{
+      res.send(result);
+    }
+  })
+ }); 
 router.get('/driver', function(req, res, next) {
 
   Driver.find({}  , function(err,result){
@@ -169,6 +184,9 @@ router.post('/driver/:id', function(req, res, next) {
  
   router.post('/manufacturers/:id', function(req, res, next) {
   
+ if(!req.body.isClose){
+  req.body.isClose = false;
+}
    Manufacturer.findByIdAndUpdate(req.params.id,req.body , {new: true}, function(err,result){
       if (err){
         console.error(err);
@@ -219,6 +237,18 @@ router.post('/driver/:id', function(req, res, next) {
   });
   
   
+  router.delete('/delivery/:id', function(req, res, next) {
+  
+    Delivery.findByIdAndRemove(req.params.id , function(err,result){
+      if (err){
+        console.error(err);
+        res.status(500).send(err);
+      }
+      else{
+        res.send(result);
+      }
+    })
+   });
   router.delete('/entityType/:id', function(req, res, next) {
   
     EntityType.findByIdAndRemove(req.params.id , function(err,result){

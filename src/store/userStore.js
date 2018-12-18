@@ -19,15 +19,6 @@ class userStore {
         this.errors = { message: err.response ? err.response.data.message : err.data, stack: err.stack };
     }
 
-    register(user) {
-        axios.post('/auth/register', user)
-            .then(res => {
-                this.errors = {}
-                this.user = res.data
-            }).catch(err => {
-                this.errors = { message: err.response ? err.response.data.message : err.data, stack: err.stack };
-            });
-    }
 }
 
 const store = new userStore();

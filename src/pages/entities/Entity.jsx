@@ -12,6 +12,13 @@ class Entity extends React.Component {
       return <div className="column1"> {value[key]} - {key}</div>
     })}</div>);
   }
+      
+  getItemDecimalText = (value,key)=>{ 
+    if (key === "date"){
+      return new Date(value).toDateString();
+    }
+    return (value["$numberDecimal"]?value["$numberDecimal"]:value);
+  }
 
   editEntity = ()=>{
     this.props.editEntity(this.props.item);
@@ -36,7 +43,7 @@ class Entity extends React.Component {
          </div>
          {Object.keys(this.props.item).map((key)=>{
            if (key[0] != "_" && key!="prices" && key != "types")
-             return <div className={key + " column"}>{key==="isClose" ?(this.props.item[key]?"קרוב": "רחוק"): this.props.item[key]}</div>
+             return <div className={key + " column"}>{key==="isClose" ?(this.props.item[key]?"קרוב": "רחוק"): this.getItemDecimalText(this.props.item[key] , key)}</div>
          })}
          {this.props.item.prices?  this.getItemText(this.props.item["prices"]) : null}
          {this.props.item.types?  this.getItemArrayText(this.props.item["types"]) : null}

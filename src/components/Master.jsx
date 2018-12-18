@@ -12,7 +12,7 @@ class Master  extends React.Component{
     if(this.props.userStore.user) {
       return(<div>
         <Link to="/deliveries" className="delivery">משלוחים</Link>
-        <Link to="/delivery" className="delivery">הוסף משלוח</Link>
+        <Link to="/entities/delivery" className="delivery">הוסף משלוח</Link>
         <Link to="/entities/driver">נהגים</Link>
       <Link to="/entities/truck">משאיות</Link>
       <Link to="/entities/milkman">חלבנים</Link>

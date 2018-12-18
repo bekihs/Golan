@@ -24,7 +24,7 @@ return new Date(date.getFullYear(), date.getMonth() + 1, 0);
   }
   @observable entity = {fromDate:this.getFirstDayOfTheMonth(),
      toDate:this.getLasttDayOfTheMonth()
-    ,grouping:"_id" , entityType:"חלב" };
+    ,grouping:"milkman" , entityType:"חלב" };
    
     
    
@@ -56,7 +56,7 @@ return new Date(date.getFullYear(), date.getMonth() + 1, 0);
     <div  className="row">
             <FormControl>
           <InputLabel htmlFor="age-simple">מוצר</InputLabel>
-          <Select
+          <Select className="input"
             value={this.entity.entityType}
             onChange={this.changeEntity}
             inputProps={{
@@ -69,28 +69,28 @@ return new Date(date.getFullYear(), date.getMonth() + 1, 0);
         </div><div className="row">
           <FormControl >
           <InputLabel htmlFor="mani-simple">דוח עבור</InputLabel>
-          <Select
+          <Select className="input"
             value={this.entity.grouping}
             onChange={this.changeEntity}
             inputProps={{
               name: 'grouping',
               id: 'mani-simple',
             }} > 
-                <MenuItem value="_id"><em>הצג את כל ההעברות</em></MenuItem> 
+                {/* <MenuItem value="_id"><em>הצג את כל ההעברות</em></MenuItem>  */}
                 <MenuItem value="milkman"><em>חלבנים</em></MenuItem> 
                 <MenuItem value="manufacturer"><em>יצרנים</em></MenuItem> 
           </Select>
         </FormControl>
         </div> <div className="row"> 
+        <span htmlFor="mani-simple">מתאריך</span>
           <FormControl className="row">
-          <InputLabel htmlFor="mani-simple">מתאריך</InputLabel>
-          <TextField
+          <TextField className="input"
              type="date" name="fromDate"   
              value={this.toDateString(this.entity.fromDate)} onChange={this.changeDateEntity} />
         </FormControl>
  </div><div className="row"> 
           <span htmlFor="toDate">עד תאריך</span>
-          <TextField
+          <TextField className="input"
              type="date" name="toDate"   InputLabelProps={{
               shrink: true,
             }}  label="עד תאריך" 

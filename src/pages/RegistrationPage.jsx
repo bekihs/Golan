@@ -34,7 +34,7 @@ class SignUpPage extends React.Component {
   processForm=(event) =>{
     // prevent default action. in this case, action is the form submission event
     event.preventDefault();
- this.props.userStore.register(this.state.user);
+//  this.props.userStore.register(this.state.user);
   }
  
   render() {

@@ -4,6 +4,7 @@ import AddIcon from '@material-ui/icons/Add';
 import {observer} from 'mobx-react';
 import {observable , action } from 'mobx';
 import CreateEntity from './CreateEntity';
+import DeliveryPage from '../delivery/DeliveryPage';
 
 @observer
 class AddPopUp extends React.Component {
@@ -13,8 +14,12 @@ class AddPopUp extends React.Component {
     }
     getPopUp=()=>{
       if (this.props.entity ||this.showPopUp )
-        return ( <CreateEntity entity={this.props.entity} togglePopUp={this.props.entity?this.props.togglePopUp : this.togglePopUp} entityName={this.props.entityName}></CreateEntity> );
-
+        {
+          if (this.props.entityName === "delivery"){
+              return (<DeliveryPage entity={this.props.entity} togglePopUp={this.props.entity?this.props.togglePopUp : this.togglePopUp} />)
+          }
+          else return  ( <CreateEntity entity={this.props.entity} togglePopUp={this.props.entity?this.props.togglePopUp : this.togglePopUp} entityName={this.props.entityName}></CreateEntity> );
+        }
     }
   render() {
        return (<div className="popUpContainer">  <Fab color="primary" aria-label="Add" >

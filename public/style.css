@@ -61,7 +61,7 @@ a:hover {
 .container {
   margin: 0 auto;
   text-align: center;
-  width: 700px;
+  width: 900px;
 }
 
 .card-heading {
@@ -108,7 +108,11 @@ a:hover {
 } */
 .table { display: table;direction: rtl;width:100%; border-collapse: collapse;}
 .row { display: table-row; }
-.column, .rTableHead { display: table-cell; }
+.column, .rTableHead { display: table-cell;padding-right: 10px; }
+.input {
+  width: 300px;
+  text-align: right;
+}
 .table .name, .table .number{
   font-size:26px;
 }

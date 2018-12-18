@@ -18,7 +18,16 @@ class DeliveryPage extends React.Component {
  
   @observable entity = {entityType:"חלב",liter:1 , count:1 , date:new Date()};
    
-   
+  padNumber(number){
+    return number>9 ? number : "0"+number;
+  }
+    
+  @action changeDateEntity=(e)=>{
+    const values = e.target.value.split("-");
+    this.entity[e.target.name] = new Date( values[0] , values[1],values[2]);
+    
+  }
+
   @action changeEntity=(e)=>{
     this.entity[e.target.name] = e.target.value;
     if (e.target.name==="milkman" || e.target.name === "entityType"){
@@ -28,7 +37,7 @@ class DeliveryPage extends React.Component {
         });
     }
     if (e.target.name === "manufacturer"){
-      this.props.entitiesStore.entities.manufacturer.forEach(element => {
+      this.props.entitiesStore.entities.manufacturers.forEach(element => {
         if (element.name === e.target.value)
             this.entity.isClose = element.isClose;
     });
@@ -49,38 +58,76 @@ class DeliveryPage extends React.Component {
     this.props.entitiesStore.getItems("manufacturers");
     this.props.entitiesStore.getItems("milkman");
   }
-   saveEntity = async()=>{
-        await this.props.entitiesStore.createDelivery(this.entity , this.props.entityName);
+  
+  constructor(props){
+    super(props);
+    this.setEntity(props)
+
+  }
+  setEntity(props){
+    if( props.entity){
+      this. entity  =  {...props.entity}
+       this.entity.price = this.entity.price["$numberDecimal"];
+       this.entity.liter = this.entity.liter["$numberDecimal"];
+       this.entity.count = this.entity.count["$numberDecimal"];
     }
-    setEntity=()=>{
+    else{ 
+      this.entity =  {entityType:"חלב",liter:1 , count:1 , date:new Date()}
+    }
+  }
+  componentWillReceiveProps(props) {
+   this.setEntity(props)
+}
+   saveEntity = async()=>{
+    if (this.props.entity){
+      await this.props.entitiesStore.editDelivery(this.entity );
+     }
+     else{
+        await this.props.entitiesStore.createDelivery(this.entity , this.props.entityName);
+      }
+       this.props.togglePopUp();
 
     }
+    togglePopUp = ()=>{
+      this.props.togglePopUp();
+    }
+    
+  toDateString(date){
+    if (!date.getFullYear){
+      date = new Date(date);
+    }
+    if (date.getFullYear)
+    return date.getFullYear() + "-" + this.padNumber(date.getMonth() + 1) + "-"+this.padNumber(date.getDate());
+    else{
+      return date;
+    }
+  }
   render() { 
     if(this.props.userStore.user) {
         return  (<Card className="popUp">
     <CardTitle title="משלוח חדש"/>
     <div  className="row">
             <FormControl>
-          <InputLabel htmlFor="age-simple">מוצר</InputLabel>
-          <Select
+          <InputLabel htmlFor="entityType">מוצר</InputLabel>
+          <Select className="select"
             value={this.entity.entityType}
             onChange={this.changeEntity}
             inputProps={{
               name: 'entityType',
-              id: 'age-simple',
+              id: 'entityType',
             }} > 
             {this.props.entitiesStore.entities["entityType"] ? this.props.entitiesStore.entities["entityType"] .map(item=>  <MenuItem value={item.name}><em>{item.name}</em></MenuItem>): null}
           </Select>
         </FormControl>
         </div><div className="row">
           <FormControl >
-          <InputLabel htmlFor="mani-simple">יצרן</InputLabel>
-          <Select
+          <InputLabel htmlFor="manufacturer">יצרן</InputLabel>
+          <Select className="select"
             value={this.entity.manufacturer}
             onChange={this.changeEntity}
             inputProps={{
               name: 'manufacturer',
-              id: 'mani-simple',
+              id: 'manufacturer',
             }} > 
             {this.props.entitiesStore.entities["manufacturers"] ? this.props.entitiesStore.entities["manufacturers"] .map(item=>  {
                 if (item.types.indexOf(this.entity.entityType) >= 0  )
@@ -91,34 +138,34 @@ class DeliveryPage extends React.Component {
         </div><div className="row">
 
           <FormControl className="row">
-          <InputLabel htmlFor="mani-simple">ליטר</InputLabel>
-          <TextField
+          <InputLabel htmlFor="liter">ליטר</InputLabel>
+          <TextField id="liter" className="input"
             floatingLabelText="ליטר" type="number" name="liter"   
             value={this.entity.liter} onChange={this.changeEntity} />
         </FormControl>
         </div><div className="row">
           <FormControl className="row">
-          <InputLabel htmlFor="mani-simple">כמות</InputLabel>
-          <TextField
+          <InputLabel htmlFor="count">כמות</InputLabel>
+          <TextField id="count" className="input"
             floatingLabelText="כמות" type="number" name="count"   
             value={this.entity.count} onChange={this.changeEntity} />
         </FormControl>
         </div><div className="row">
           <FormControl className="row">
-          <TextField
-             type="datetime-local" name="date"   
-            value={this.entity.date.toString()} onChange={this.changeEntity} />
+          <TextField className="input"
+             type="date" name="date"   
+            value={this.toDateString(this.entity.date)} onChange={this.changeDateEntity}  onInput={this.changeDateEntity} />
         </FormControl>
 
           </div><div className="row"> 
         <FormControl className="row">
-          <InputLabel htmlFor="mani-simple">מחלבה</InputLabel>
-          <Select
+          <InputLabel htmlFor="milkman">מחלבה</InputLabel>
+          <Select className="select"
             value={this.entity.milkman}
             onChange={this.changeEntity}
             inputProps={{
               name: 'milkman',
-              id: 'mani-simple',
+              id: 'milkman',
             }} > 
             {this.props.entitiesStore.entities["milkman"] ? this.props.entitiesStore.entities["milkman"] .map(item=>  {
                 if(Object.keys(item.prices).indexOf(this.entity.entityType) >= 0 )
@@ -129,32 +176,32 @@ class DeliveryPage extends React.Component {
         </FormControl>  </div><div className="row">
         
         <FormControl className="row">
-          <InputLabel htmlFor="mani-simple">מחיר</InputLabel>
-          <TextField
+          <InputLabel htmlFor="price">מחיר</InputLabel>
+          <TextField id="price" className="input"
              type="text" name="price"   
             value={this.entity.price} onChange={this.changeEntity} />
         </FormControl>  </div><div className="row">
         <FormControl className="row">
-          <InputLabel htmlFor="age-simple">נהג</InputLabel>
-          <Select
+          <InputLabel htmlFor="driver">נהג</InputLabel>
+          <Select className="select"
             value={this.entity.driver}
             onChange={this.changeEntity}
             inputProps={{
               name: 'driver',
-              id: 'age-simple',
+              id: 'driver',
             }} > 
             {this.props.entitiesStore.entities["driver"] ? this.props.entitiesStore.entities["driver"] .map(item=>  <MenuItem value={item.name}><em>{item.name}</em></MenuItem>): null}
           </Select>
         </FormControl>
         </div><div className="row">
         <FormControl className="row">
-          <InputLabel htmlFor="truck-simple">משאית</InputLabel>
-          <Select
+          <InputLabel htmlFor="truck">משאית</InputLabel>
+          <Select className="select"
             value={this.entity.truck}
             onChange={this.changeEntity}
             inputProps={{
               name: 'truck',
-              id: 'truck-simple',
+              id: 'truck',
             }} > 
             {this.props.entitiesStore.entities["truck"] ? this.props.entitiesStore.entities["truck"] .map(item=>  <MenuItem value={item.number}><em>{item.number}</em></MenuItem>): null}
           </Select>
@@ -162,16 +209,16 @@ class DeliveryPage extends React.Component {
         </div><div className="row">
         
         <FormControl className="row">
-          <InputLabel htmlFor="mani-simple">תעודת משלוח</InputLabel>
-          <TextField
+          <InputLabel htmlFor="cerDel">תעודת משלוח</InputLabel>
+          <TextField id="cerDel" className="input"
              type="text" name="cerDel"   
             value={this.entity.cerDel} onChange={this.changeEntity} />
         </FormControl>
         </div><div className="row">
         
         <FormControl className="row">
-          <InputLabel htmlFor="mani-simple">תעודת מכירה </InputLabel>
-          <TextField
+          <InputLabel htmlFor="cerSell">תעודת מכירה </InputLabel>
+          <TextField id="cerSell" className="input"
              type="text" name="cerSell"   
             value={this.entity.cerSell} onChange={this.changeEntity} />
         </FormControl>
@@ -179,7 +226,7 @@ class DeliveryPage extends React.Component {
 </div>
         <div className="row"> 
          <SaveIcon className="buttons" onClick={this.saveEntity} />
-         <CancelTwoToneIcon  className="buttons" onClick={this.props.togglePopUp}/>
+         <CancelTwoToneIcon  className="buttons" onClick={this.togglePopUp}/>
          </div>
       </Card>)  
       } else{

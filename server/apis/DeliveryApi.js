@@ -1,11 +1,6 @@
 
 var express = require('express');
-var router = express.Router();
-var Driver = require("../models/DriverModel");
-var EntityType = require("../models/EntityTypeModel");
-var Manufacturer = require("../models/ManufacturerModel");
-var Milkman = require("../models/MilkmanModel");
-var Truck = require("../models/TrucksMoel");
+var router = express.Router(); 
 var Delivery = require("../models/delivery");
 
 //the '/users' routes will go here
@@ -38,18 +33,18 @@ router.post('/', function(req, res, next) {
 
   
     
-router.get('/', function(req, res, next) {
+// router.get('/', function(req, res, next) {
 
-  Delivery.find({}  , function(err,result){
-    if (err){
-      console.error(err);
-      res.status(500).send(err);
-    }
-    else{
-      res.send(result);
-    }
-  })
- });
+//   Delivery.find({}  , function(err,result){
+//     if (err){
+//       console.error(err);
+//       res.status(500).send(err);
+//     }
+//     else{
+//       res.send(result);
+//     }
+//   })
+//  });
  
     
 router.post('/search/milkman', function(req, res, next) {
@@ -58,15 +53,14 @@ if (req.body.fromDate || req.body.toDate){
   const  toDate = req.body.toDate ? new Date(req.body.toDate) : new Date(1,1,2400)
   req.body,date =  {"$gte": fromDate, "$lt": toDate} ;
   req.body.fromDate = undefined;
-  req.body.toDate = undefined;
-  req.body.$not= {milkman: "שטראוס"};
+  req.body.toDate = undefined; 
 }
 
 const groupObj =  {
   totalAmout: { $sum:  "$count"  },
   sumPrice: { $sum: { $multiply: [ "$price", "$count" ] } },
   price: { $avg: "$price" },
-  _id: "$milkman" 
+  _id: {milkman : "$milkman",isClose : "$isClose"} 
 };
  
 req.body.grouping = undefined;
@@ -80,21 +74,69 @@ req.body.grouping = undefined;
       console.error(err);
       res.status(500).send(err);
     }
-    else{
-      groupObj._id.isClose = "$isClose";
-  req.body.$not=undefined;
-  req.body.milkman= "שטראוס";
-
-      Delivery.aggregate([ { "$match":   req.body  },
-      {
-        $group:groupObj
-         
-      }] , function (err , rsult2){
-      res.send([result , rsult2]);
-    })}
-  })
+    else{ 
+      res.send(result);
+  }
  });
+});
  
+router.post('/search/manufacturer', function(req, res, next) {
+  if (req.body.fromDate || req.body.toDate){
+    const  fromDate = req.body.fromDate ? new Date(req.body.fromDate) : new Date(1,1,1970)
+    const  toDate = req.body.toDate ? new Date(req.body.toDate) : new Date(1,1,2400)
+    req.body,date =  {"$gte": fromDate, "$lt": toDate} ;
+    req.body.fromDate = undefined;
+    req.body.toDate = undefined;
+    req.body.milkman= {$ne: "שטראוס"};
+  }
+  
+  const groupObj =  {
+    totalAmout: { $sum:  "$count"  },
+    _id: {manufacturer : "$manufacturer"} 
+  };
+   
+  req.body.grouping = undefined;
+  
+    Delivery.aggregate([ { "$match":   req.body},
+    {
+      $group:groupObj
+       
+    }], function(err,result){
+      if (err){
+        console.error(err);
+        res.status(500).send(err);
+      }
+      else{
+        groupObj._id.isClose = "$isClose";
+    req.body.milkman= "שטראוס";
+  
+        Delivery.aggregate([ { "$match":   req.body  },
+        {
+          $group:groupObj
+           
+        }] , function (err , rsult2){
+          if (err){
+            console.error(err);
+            res.status(500).send(err);
+          }
+          else{ 
+            rsult2.forEach((item)=>{
+                items = result.filter((i)=>i._id.manufacturer === item._id.manufacturer);
+                if (items.length > 0){
+                  items[0]["sh"+item._id.isClose] = item.totalAmout
+                }
+                else{
+                  result.push(item);
+                  item["sh"+item._id.isClose] = item.totalAmout;
+                  item.totalAmout = 0;
+                }
+            })
+            res.send(result );
+          }
+      })}
+    })
+   });
+   
   
 router.post('/get', function(req, res, next) {
   if (req.body.fromDate || req.body.toDate){
