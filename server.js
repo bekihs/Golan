@@ -45,7 +45,7 @@ var ensureAuthenticated = function(req, res, next) {
 // Add the auth routing
 app.use("/auth",authRouting);
 app.use("/api",ensureAuthenticated,enumsApi);
-app.use("/delivery",DeliveryApi);
+app.use("/delivery",ensureAuthenticated,DeliveryApi);
 
 app.get('/currentuser', ensureAuthenticated, function(req, res) {
   if (req.user) {
