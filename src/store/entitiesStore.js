@@ -4,7 +4,7 @@ import axios from 'axios';
 
 class entitiesStore {
     @observable entities = {};
-    @observable deliveries = [];
+    @observable deliveries = null;
     @observable errors = {};
     @observable searchObj = {};
     entitiesFields = {
@@ -88,15 +88,16 @@ class entitiesStore {
         this.errors = { message: err.response ? err.response.data.message : err.data, stack: err.stack };
     }
     searchDeliveries = (entity) => {
+        this.shtraosDeliveries = [];
+        this.deliveries = [];
 
         axios.post("/delivery/search/" + entity.grouping, entity)
             .then((result) => {
-                runInAction(() => {
-                    this.props.entitiesStore.shtraosDeliveries = [];
+                runInAction(() => { 
+                    this.shtraosDeliveries = [];
                     if (entity.grouping === "milkman") {
                         const arr = [];
-                        this.shtraosDeliveries = [];
-                        this.deliveriseSum = [0, 0, 0]
+                        this.deliveriseSum = ["-",0, 0, 0]
                         result.data.forEach(item => {
                             if (item._id.milkman === "שטראוס") {
                                 if (!item._id.isClose) {
@@ -121,9 +122,9 @@ class entitiesStore {
 
                                 }
 
-                                this.deliveriseSum[0] += parseFloat(item.totalAmout["$numberDecimal"]);
-                                this.deliveriseSum[1] += parseFloat(item.totalLiter["$numberDecimal"]);
-                                this.deliveriseSum[2] += parseFloat(item.sumPrice["$numberDecimal"]);
+                                this.deliveriseSum[1] += parseFloat(item.totalAmout["$numberDecimal"]);
+                                this.deliveriseSum[2] += parseFloat(item.totalLiter["$numberDecimal"]);
+                                this.deliveriseSum[3] += parseFloat(item.sumPrice["$numberDecimal"]);
                             }
                         });
                         result.data = arr;

@@ -31,10 +31,11 @@ return ( <div className="row"> <div className="column">-</div> <div className="c
   }
 
   getSums = ()=>{ 
-      return ( <div className="row"> <div className="column">-</div> <div className="column">-</div><div className="column">-</div>
+      return ( <div className="row"> <div className="column">-</div> <div className="column">-</div> 
       <div className="column">{this.props.entitiesStore.deliveriseSum[0]}</div>
       <div className="column">{this.props.entitiesStore.deliveriseSum[1]}</div>
-      <div className="column">{this.props.entitiesStore.deliveriseSum[2] + "ש\"ח"}</div> </div>)
+      <div className="column">{this.props.entitiesStore.deliveriseSum[2]}</div>
+      <div className="column">{this.props.entitiesStore.deliveriseSum[3] ? this.props.entitiesStore.deliveriseSum[3] + "ש\"ח" : "-"}</div> </div>)
   }
   render() {
     if (this.props.userStore.user){ 
