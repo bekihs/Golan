@@ -25,8 +25,16 @@ return ( <div className="row"> <div className="column">-</div> <div className="c
       return ( <div className="row"> <div className="column">-</div> <div className="column">-</div>
       <div className="column">מחיר ליחידה</div>
       <div className="column">סכה כמות</div>
+      <div className="column">סכה ליטר</div>
       <div className="column">סהכ מחיר</div></div>)
     }
+  }
+
+  getSums = ()=>{ 
+      return ( <div className="row"> <div className="column">-</div> <div className="column">-</div><div className="column">-</div>
+      <div className="column">{this.props.entitiesStore.deliveriseSum[0]}</div>
+      <div className="column">{this.props.entitiesStore.deliveriseSum[1]}</div>
+      <div className="column">{this.props.entitiesStore.deliveriseSum[2] + "ש\"ח"}</div> </div>)
   }
   render() {
     if (this.props.userStore.user){ 
@@ -38,7 +46,13 @@ return ( <div className="row"> <div className="column">-</div> <div className="c
        {this.props.entitiesStore.deliveries?this.props.entitiesStore.deliveries.map((item)=>{
          return (<Delivery grouping={this.props.entitiesStore.searchObj.grouping} key={item._id} item={item} editEntity={this.editEntity}/>)
        }) : <div>Loading</div>}
+       {<div className="row">סך הכל</div>}
+       {this.props.entitiesStore.deliveries?this.getSums() : null}
+       {this.props.entitiesStore.shtraosDeliveries?<div className="row">שטראוס</div>:null}
        
+       {this.props.entitiesStore.shtraosDeliveries?this.props.entitiesStore.shtraosDeliveries.map((item)=>{
+         return (<Delivery grouping={this.props.entitiesStore.searchObj.grouping} key={item._id} item={item} editEntity={this.editEntity}/>)
+       }) : null}
        </div></div>)
     }
     else{

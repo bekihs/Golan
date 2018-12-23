@@ -19,12 +19,7 @@ class Delivery extends React.Component {
     this.props.entitiesStore.deleteEntity(this.props.item);
   }
   getColumnsArray=()=>{
-    if(this.props.grouping === "manufacturer"){
-      return (["totalAmout" , "shtrue" , "shfalse"])
-          }
-          else{
-            return (["price" ,"totalAmout","sumPrice"])
-          }
+    return this.props.entitiesStore.sumColumns[this.props.grouping]; 
   }
    
   render() {
@@ -39,6 +34,7 @@ class Delivery extends React.Component {
          <div className="column"> {this.getItemText(arr[0])}</div>
          <div className="column"> {this.getItemText(arr[1])}</div>
          <div className="column"> {this.getItemText(arr[2])}</div>
+         <div className="column"> {this.getItemText(arr[3])}</div>
          </div>) 
        
   }

@@ -58,6 +58,7 @@ if (req.body.fromDate || req.body.toDate){
 
 const groupObj =  {
   totalAmout: { $sum:  "$count"  },
+  totalLiter: { $sum:  "$count"  },
   sumPrice: { $sum: { $multiply: [ "$price", "$count" ] } },
   price: { $avg: "$price" },
   _id: {milkman : "$milkman",isClose : "$isClose"} 
