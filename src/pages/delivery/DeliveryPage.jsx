@@ -79,6 +79,7 @@ class DeliveryPage extends React.Component {
    this.setEntity(props)
 }
    saveEntity = async()=>{
+     try{
     if (this.props.entity){
       await this.props.entitiesStore.editDelivery(this.entity );
      }
@@ -86,7 +87,10 @@ class DeliveryPage extends React.Component {
         await this.props.entitiesStore.createDelivery(this.entity , this.props.entityName);
       }
        this.props.togglePopUp();
-
+    }
+    catch(err){
+      alert(err);
+    }
     }
     togglePopUp = ()=>{
       this.props.togglePopUp();

@@ -32,7 +32,7 @@ class EntitesPage extends React.Component {
        return (<div class="container">
     <h2 className="title" >{this.props.entitiesStore.entitiesFields[this.props.entitiesStore.entityType].name+ " חדש "} </h2>
         <AddPopUp togglePopUp={this.editEntity} entityName={this.props.entitiesStore.entityType} entity={this.entity}></AddPopUp> <div className="table">
-       {this.props.entitiesStore.entities[this.props.entitiesStore.entityType].map((item)=>{
+       {this.props.entitiesStore.entities[this.props.entitiesStore.entityType].reverse().map((item)=>{
         
          return (<Entity item={item} editEntity={this.editEntity}/>)
        })}

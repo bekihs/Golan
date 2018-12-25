@@ -42,14 +42,14 @@ class entitiesStore {
                     this.entities["delivery"] = this.entities["delivery"]
                         .map((item) => item._id === entity._id ? result.data : item);
                 })
-            }).catch(this.setError);
+            }) 
     }
     createDelivery = (entity) => {
 
         axios.post("/delivery/", entity)
             .then((result) => {
                 this.entities["delivery"].push(result.data)
-            }).catch(this.setError);
+            }) 
     }
     editEntity = (entity) => {
         axios.post('/api/' + this.entityType + "/" + entity._id, entity)

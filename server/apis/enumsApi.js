@@ -78,7 +78,7 @@ router.post('/entityType', function(req, res, next) {
     
 router.get('/delivery', function(req, res, next) {
 
-  Delivery.find({}  , function(err,result){
+  Delivery.find({}).sort({date: -1}).exec(function(err,result){
     if (err){
       console.error(err);
       res.status(500).send(err);
