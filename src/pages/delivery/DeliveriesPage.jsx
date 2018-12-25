@@ -24,8 +24,8 @@ return ( <div className="row"> <div className="column">-</div> <div className="c
     else{
       return ( <div className="row"> <div className="column">-</div> <div className="column">-</div>
       <div className="column">מחיר ליחידה</div>
-      <div className="column">סכה כמות</div>
-      <div className="column">סכה ליטר</div>
+      <div className="column">סהכ כמות</div>
+      <div className="column">סהכ ליטר</div>
       <div className="column">סהכ מחיר</div></div>)
     }
   }

@@ -24,7 +24,7 @@ class DeliveryPage extends React.Component {
     
   @action changeDateEntity=(e)=>{
     const values = e.target.value.split("-");
-    this.entity[e.target.name] = new Date( values[0] , values[1],values[2]);
+    this.entity[e.target.name] = new Date( values[0] , values[1]-1,values[2]);
     
   }
 
