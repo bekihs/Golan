@@ -51,7 +51,7 @@ router.post('/search/milkman', function(req, res, next) {
 if (req.body.fromDate || req.body.toDate){
   const  fromDate = req.body.fromDate ? new Date(req.body.fromDate) : new Date(1,1,1970)
   const  toDate = req.body.toDate ? new Date(req.body.toDate) : new Date(1,1,2400)
-  req.body,date =  {"$gte": fromDate, "$lt": toDate} ;
+  req.body.date =  {"$gte": fromDate, "$lt": toDate} ;
   req.body.fromDate = undefined;
   req.body.toDate = undefined; 
 }
