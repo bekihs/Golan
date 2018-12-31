@@ -5,6 +5,7 @@ import CurrentUser from './pages/CurrentUser.jsx';
 // import Registration from './pages/RegistrationPage.jsx';
 import DeliveryPage from './pages/delivery/DeliveryPage.jsx';
 import DeliverisesPage from './pages/delivery/DeliveriesPage';
+import Deliveries from './pages/delivery/Deliveries.jsx';
 
 
 const routes = {
@@ -39,6 +40,10 @@ const routes = {
       component: DeliverisesPage
       },
 
+      {
+        path : '/entity/delivery',
+        component: Deliveries
+        },
     {
     path : '/entities/:name',
     component: Entities

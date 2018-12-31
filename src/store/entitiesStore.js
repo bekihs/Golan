@@ -70,6 +70,14 @@ class entitiesStore {
             }).catch(this.setError);
     }
 
+    searchDeliveriesEntities=(entity)=>{
+        axios.post("/delivery/get" , entity)
+        .then((result) => {
+            runInAction(() => {
+                this.entities["delivery"] = result.data;
+            })
+        }).catch(this.setError);
+    }
     @action setEntityType = (entityName) => {
         this.entityType = entityName;
     }
