@@ -15,12 +15,24 @@ class Deliveries extends React.Component {
     this.entity = entity;
   }
 
+  getSums = ()=>{ 
+   if (this.props.entitiesStore.deliveriseSum){
+      return ( <div className="row">  <div>-</div>
+    <div className="column"> סכה כמות : {this.props.entitiesStore.deliveriseSum[0]}</div>
+    <div className="column"> סכה ליטרים : {this.props.entitiesStore.deliveriseSum[1]} </div>
+    <div className="column">{this.props.entitiesStore.deliveriseSum[2]   + "ש\"ח" }</div> </div>)
+}
+else{
+  return null;
+}
+  }
   getTable() {
     if (this.props.userStore.user){
       if (this.props.entitiesStore.entities["delivery"]){
        return (<div>
     <h2 className="title" >{this.props.entitiesStore.entitiesFields["delivery"].name+ " חדש "} </h2>
         <AddPopUp togglePopUp={this.editEntity} entityName={"delivery"} entity={this.entity}></AddPopUp> <div className="table">
+       {this.getSums()}
        {this.props.entitiesStore.entities["delivery"].reverse().map((item)=>{
         
          return (<Entity item={item} editEntity={this.editEntity}/>)

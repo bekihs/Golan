@@ -74,7 +74,16 @@ class entitiesStore {
         axios.post("/delivery/get" , entity)
         .then((result) => {
             runInAction(() => {
+
                 this.entities["delivery"] = result.data;
+                this.deliveriseSum = [0, 0, 0];
+                result.data.forEach((i)=>{
+                
+                    this.deliveriseSum[0] += parseFloat(i.count["$numberDecimal"]);
+                    this.deliveriseSum[1] += parseFloat(i.liter["$numberDecimal"]);
+                    this.deliveriseSum[2] +=( parseFloat(i.price["$numberDecimal"]) * parseFloat(i.count["$numberDecimal"]));
+                })
+
             })
         }).catch(this.setError);
     }

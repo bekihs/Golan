@@ -68,7 +68,7 @@ return new Date(date.getFullYear(), date.getMonth() + 1, 0);
         </FormControl>
         </div><div className="row">
           <FormControl >
-          <InputLabel htmlFor="mani-simple">דוח עבור</InputLabel>
+          <InputLabel htmlFor="mani-simple">חלבן</InputLabel>
           <Select className="input"
             value={this.entity.milkman}
             onChange={this.changeEntity}
