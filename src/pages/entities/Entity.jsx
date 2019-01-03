@@ -25,7 +25,7 @@ class Entity extends React.Component {
   }
   
   deleteEntity = ()=>{
-    this.props.entitiesStore.deleteEntity(this.props.item);
+    this.props.deleteEntity ? this.props.deleteEntity(this.props.item) : this.props.entitiesStore.deleteEntity(this.props.item);
   }
   
   getItemArrayText = (value)=>{

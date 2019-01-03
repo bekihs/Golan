@@ -34,6 +34,16 @@ class entitiesStore {
                 })
             }).catch(this.setError);
     }
+
+    deleteDelivery = (entity) => {
+        axios.delete('/api/delivery/' + entity._id)
+            .then((result) => {
+                runInAction(() => {
+                    this.entities["delivery"] = this.entities["delivery"].filter((item) => item._id != entity._id)
+                })
+            }).catch(this.setError);
+    }
+
     editDelivery = (entity) => {
 
         axios.post("/delivery/" + entity._id, entity)
