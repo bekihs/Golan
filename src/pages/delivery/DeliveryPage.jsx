@@ -17,7 +17,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 class DeliveryPage extends React.Component {
  
   @observable entity = {entityType:"חלב",liter:1 , count:1 , date:new Date()};
-   
+   @observable error = "";
   padNumber(number){
     return number>9 ? number : "0"+number;
   }
@@ -67,9 +67,9 @@ class DeliveryPage extends React.Component {
   setEntity(props){
     if( props.entity){
       this. entity  =  {...props.entity}
-       this.entity.price = this.entity.price["$numberDecimal"];
-       this.entity.liter = this.entity.liter["$numberDecimal"];
-       this.entity.count = this.entity.count["$numberDecimal"];
+       this.entity.price = this.entity.price ?  this.entity.price ["$numberDecimal"] : 1;
+       this.entity.liter = this.entity.liter? this.entity.liter["$numberDecimal"] : 1;
+       this.entity.count = this.entity.count? this.entity.count["$numberDecimal"] : 1;
     }
     else{ 
       this.entity =  {entityType:"חלב",liter:1 , count:1 , date:new Date()}
@@ -79,14 +79,19 @@ class DeliveryPage extends React.Component {
    this.setEntity(props)
 }
    saveEntity = async()=>{
-     try{
+     try{ let res;
     if (this.props.entity){
-      await this.props.entitiesStore.editDelivery(this.entity );
+      res = await this.props.entitiesStore.editDelivery(this.entity );
      }
      else{
-        await this.props.entitiesStore.createDelivery(this.entity , this.props.entityName);
+        res = await this.props.entitiesStore.createDelivery(this.entity , this.props.entityName);
       }
+      if (res && res.length > 0){
+        this.error = res;
+      }
+      else{
        this.props.togglePopUp();
+      }
     }
     catch(err){
       alert(err);
@@ -112,6 +117,7 @@ class DeliveryPage extends React.Component {
     <CardTitle title="משלוח חדש"/>
     <div  className="row">
             <FormControl>
+              <span className="error">{this.error}</span>
           <InputLabel htmlFor="entityType">מוצר</InputLabel>
           <Select className="select"
             value={this.entity.entityType}

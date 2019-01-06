@@ -17,15 +17,23 @@ router.post('/', function(req, res, next) {
   if (!req.body.count){
     req.body.count = req.body.liter;
   }
-    Delivery.create(req.body , function(err,result){
-      if (err){
-        console.error(err);
-        res.status(500).send(err);
-      }
-      else{
-        res.send(result);
-      }
-    })
+
+  Delivery.find({cerDel:req.body.cerDel} , (err,value)=>{
+    if (value && value.length > 0){
+  res.status(500).send("תעודת משלוח כבר קיימת")
+    }
+else{
+  Delivery.create(req.body , function(err,result){
+        if (err){
+          console.error(err);
+          res.status(500).send(err);
+        }
+        else{
+          res.send(result);
+        }
+      })}
+  })
+    
   // }
   // })
 

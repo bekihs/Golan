@@ -27,21 +27,25 @@ class entitiesStore {
     };
 
     deleteEntity = (entity) => {
+        if(window.confirm("Are you sure you want to delete " + (entity.name || entity.number  ) + "?")){
         axios.delete('/api/' + this.entityType + "/" + entity._id)
             .then((result) => {
                 runInAction(() => {
                     this.entities[this.entityType] = this.entities[this.entityType].filter((item) => item._id != entity._id)
                 })
             }).catch(this.setError);
+        }
     }
 
     deleteDelivery = (entity) => {
-        axios.delete('/api/delivery/' + entity._id)
+        if(window.confirm("Are you sure you want to delete " +  entity.cerDel + "?")){
+            axios.delete('/api/delivery/' + entity._id)
             .then((result) => {
                 runInAction(() => {
                     this.entities["delivery"] = this.entities["delivery"].filter((item) => item._id != entity._id)
                 })
             }).catch(this.setError);
+        }
     }
 
     editDelivery = (entity) => {
@@ -56,10 +60,15 @@ class entitiesStore {
     }
     createDelivery = (entity) => {
 
-        axios.post("/delivery/", entity)
+        return axios.post("/delivery/", entity)
             .then((result) => {
                 this.entities["delivery"].push(result.data)
+                return null;
             }) 
+            .catch((err)=>{
+                alert(err.response.data);
+                return err.response.data;
+            })
     }
     editEntity = (entity) => {
         axios.post('/api/' + this.entityType + "/" + entity._id, entity)
