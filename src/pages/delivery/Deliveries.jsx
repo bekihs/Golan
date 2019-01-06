@@ -18,8 +18,8 @@ class Deliveries extends React.Component {
   getSums = ()=>{ 
    if (this.props.entitiesStore.deliveriseSum){
       return ( <div className="row">  <div>-</div>
-    <div className="column"> סכה כמות  {this.props.entitiesStore.deliveriseSum[0]}</div>
-    <div className="column"> סכה ליטרים  {this.props.entitiesStore.deliveriseSum[1]} </div>
+    <div className="column"> סהכ כמות  {this.props.entitiesStore.deliveriseSum[0]}</div>
+    <div className="column"> סהכ ליטרים  {this.props.entitiesStore.deliveriseSum[1]} </div>
     <div>-</div>
     <div className="column">{ Math.round(this.props.entitiesStore.deliveriseSum[2]*100)/100   + " ש\"ח" }</div> </div>)
 }
