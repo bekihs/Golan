@@ -16,7 +16,7 @@ import InputLabel from '@material-ui/core/InputLabel';
 @observer
 class DeliveryPage extends React.Component {
 
-  @observable entity = { entityType: "חלב", date: new Date() };
+  @observable entity = { entityType: "חלב", date: new Date() , liter:1 };
   @observable error = "";
   padNumber(number) {
     return number > 9 ? number : "0" + number;
@@ -61,22 +61,22 @@ class DeliveryPage extends React.Component {
 
   constructor(props) {
     super(props);
-    this.setEntity(props)
+    this.setEntity(props.entity)
 
   }
-  setEntity(props) {
-    if (props.entity) {
-      this.entity = { ...props.entity }
+  setEntity(entity) {
+    if (entity) {
+      this.entity = { ...entity}
       this.entity.price = this.entity.price ? this.entity.price["$numberDecimal"] : 1;
       this.entity.liter = this.entity.liter ? this.entity.liter["$numberDecimal"] : 1;
       this.entity.count = this.entity.count ? this.entity.count["$numberDecimal"] : 1;
     }
     else {
-      this.entity = { entityType: "חלב", date: new Date() }
+      this.entity = { entityType: "חלב", date: new Date() , liter:1}
     }
   }
   componentWillReceiveProps(props) {
-    this.setEntity(props)
+    this.setEntity(props.entity)
   }
   saveEntity = async () => {
     try {
@@ -85,7 +85,7 @@ class DeliveryPage extends React.Component {
         alert("בבקשה הכנס כמות.")
       }
       else {
-        if (this.props.entity) {
+        if (this.props.entity || this.entity._id) {
           res = await this.props.entitiesStore.editDelivery(this.entity);
         }
         else {
@@ -100,7 +100,14 @@ class DeliveryPage extends React.Component {
       }
     }
     catch (err) {
-      alert(err);
+      if (err.err){
+        if (window.confirm(err.err)){
+          this.setEntity( err.value[0]);
+        }
+      }
+      else{
+        alert(err);
+      }
     }
   }
   togglePopUp = () => {

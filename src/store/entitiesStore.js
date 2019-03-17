@@ -49,12 +49,13 @@ class entitiesStore {
     }
 
     editDelivery = (entity) => {
-
         axios.post("/delivery/" + entity._id, entity)
             .then((result) => {
                 runInAction(() => {
+                    if (this.entities && this.entities["delivery"]){
                     this.entities["delivery"] = this.entities["delivery"]
                         .map((item) => item._id === entity._id ? result.data : item);
+                    }
                 })
             }) 
     }
@@ -66,8 +67,7 @@ class entitiesStore {
                 return null;
             }) 
             .catch((err)=>{
-                alert(err.response.data);
-                return err.response.data;
+                throw(err.response.data);
             })
     }
     editEntity = (entity) => {

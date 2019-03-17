@@ -5,22 +5,14 @@ var Delivery = require("../models/delivery");
 
 //the '/users' routes will go here
 
-router.post('/', function(req, res, next) {
-
-  // Milkman.findOne({name:req.body.milkman},(err , milkman)=>{
-  //   if (err){
-  //     console.error(err);
-  //     res.status(500).send(err);
-  //   } 
-  //   else{console.log(milkman)
-  //     req.body.price = milkman.prices[req.body.entityType];
+router.post('/', function(req, res, next) {   
   if (!req.body.count){
     req.body.count = req.body.liter;
   }
 
   Delivery.find({cerDel:req.body.cerDel} , (err,value)=>{
     if (value && value.length > 0){
-  res.status(500).send("תעודת משלוח כבר קיימת")
+  res.status(500).send({err:". תעודת משלוח כבר קיימת, תרצה להציג את פרטיה?" , value})
     }
 else{
   Delivery.create(req.body , function(err,result){

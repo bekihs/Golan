@@ -43,6 +43,9 @@ return new Date(date.getFullYear(), date.getMonth() + 1, 0);
   componentDidMount() {
     this.props.entitiesStore.getItems("entityType"); 
     this.props.entitiesStore.getItems("milkman"); 
+    this.props.entitiesStore.getItems("truck"); 
+    this.props.entitiesStore.getItems("driver"); 
+    this.props.entitiesStore.getItems("manufacturers"); 
   } 
   padNumber(number){
     return number>9 ? number : "0"+number;
@@ -80,7 +83,55 @@ return new Date(date.getFullYear(), date.getMonth() + 1, 0);
             {this.props.entitiesStore.entities["milkman"] ? this.props.entitiesStore.entities["milkman"] .map(item=>  <MenuItem value={item.name}><em>{item.name}</em></MenuItem>): null}
           </Select>
         </FormControl>
-        </div> <div className="row"> 
+        </div>
+        
+        <div  className="row">
+            <FormControl>
+          <InputLabel htmlFor="age-simple">יצרן</InputLabel>
+          <Select className="input"
+            value={this.entity.manufacturer}
+            onChange={this.changeEntity}
+            inputProps={{
+              name: 'manufacturer',
+              id: 'manufacturer',
+            }} > 
+                <MenuItem  ><em>-</em></MenuItem> 
+            {this.props.entitiesStore.entities["manufacturers"] ? this.props.entitiesStore.entities["manufacturers"] .map(item=>  <MenuItem value={item.name}><em>{item.name}</em></MenuItem>): null}
+          </Select>
+        </FormControl>
+        </div>
+        
+        <div  className="row">
+            <FormControl>
+          <InputLabel htmlFor="age-simple">נהג</InputLabel>
+          <Select className="input"
+            value={this.entity.driver}
+            onChange={this.changeEntity}
+            
+              name='driver'
+              id= 'driver'
+             >
+                <MenuItem  ><em>-</em></MenuItem> 
+            {this.props.entitiesStore.entities["driver"] ? this.props.entitiesStore.entities["driver"] .map(item=>  <MenuItem value={item.name}><em>{item.name}</em></MenuItem>): null}
+             </Select>  
+        </FormControl>
+        </div> 
+        <div  className="row">
+            <FormControl>
+          <InputLabel htmlFor="age-simple">משאית</InputLabel>
+          <Select className="input"
+            value={this.entity.truck}
+            onChange={this.changeEntity}
+              name= 'truck'
+              id='truck'
+             >
+                <MenuItem  ><em>-</em></MenuItem> 
+            {this.props.entitiesStore.entities["truck"] ? this.props.entitiesStore.entities["truck"] .map(item=>  <MenuItem value={item.number}><em>{item.number}</em></MenuItem>): null}
+             </Select>  
+        </FormControl>
+        </div>  
+        
+         <div className="row"> 
         <span htmlFor="mani-simple">מתאריך</span>
           <FormControl className="row">
           <TextField className="input"
