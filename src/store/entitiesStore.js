@@ -8,8 +8,8 @@ class entitiesStore {
     @observable errors = {};
     @observable searchObj = {};
     entitiesFields = {
-        driver: { name: "נהג", names: "נהגים", fields: ["name", "number"] },
-        truck: { name: "משאית", names: "משאיות", fields: ["number"] },
+        driver: { name: "נהג", names: "נהגים", fields: ["name", "number", "isArchive"] },
+        truck: { name: "משאית", names: "משאיות", fields: ["number" , "isArchive"] },
         milkman: { name: "חלבן", names: "חלבנים", fields: ["name", "arrPrices"] },
         entityType: { name: "מוצר", names: "מוצרים", fields: ["name"] },
         manufacturers: { name: "יצרן", names: "יצרנים", fields: ["name", "isClose", "types"] },

@@ -2,7 +2,8 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var DriverShema = new Schema({
-  number:  { type : String , unique : true}
+  number:  { type : String , unique : true},
+  isArchive: {type:Boolean}
 });
 
 

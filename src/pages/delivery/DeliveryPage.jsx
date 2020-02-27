@@ -213,7 +213,7 @@ class DeliveryPage extends React.Component {
                 name: 'driver',
                 id: 'driver',
               }} >
-              {this.props.entitiesStore.entities["driver"] ? this.props.entitiesStore.entities["driver"].map(item => <MenuItem value={item.name}><em>{item.name}</em></MenuItem>) : null}
+              {this.props.entitiesStore.entities["driver"] ? this.props.entitiesStore.entities["driver"].filter(i=>!i.isArchive).map(item => <MenuItem value={item.name}><em>{item.name}</em></MenuItem>) : null}
             </Select>
           </FormControl>
         </div><div className="row">
@@ -226,7 +226,7 @@ class DeliveryPage extends React.Component {
                 name: 'truck',
                 id: 'truck',
               }} >
-              {this.props.entitiesStore.entities["truck"] ? this.props.entitiesStore.entities["truck"].map(item => <MenuItem value={item.number}><em>{item.number}</em></MenuItem>) : null}
+              {this.props.entitiesStore.entities["truck"] ? this.props.entitiesStore.entities["truck"].filter(i=>!i.isArchive).map(item => <MenuItem value={item.number}><em>{item.number}</em></MenuItem>) : null}
             </Select>
           </FormControl>
         </div><div className="row">

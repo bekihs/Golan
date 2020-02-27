@@ -112,7 +112,7 @@ return new Date(date.getFullYear(), date.getMonth() + 1, 0);
               id= 'driver'
              >
                 <MenuItem  ><em>-</em></MenuItem> 
-            {this.props.entitiesStore.entities["driver"] ? this.props.entitiesStore.entities["driver"] .map(item=>  <MenuItem value={item.name}><em>{item.name}</em></MenuItem>): null}
+            {this.props.entitiesStore.entities["driver"] ? this.props.entitiesStore.entities["driver"].sort((a,b)=>( a.isArchive?1:0)-(b.isArchive?1:0)).map(item=>  <MenuItem value={item.name}><em>{item.name}</em></MenuItem>): null}
              </Select>  
         </FormControl>
         </div> 
@@ -126,7 +126,7 @@ return new Date(date.getFullYear(), date.getMonth() + 1, 0);
               id='truck'
              >
                 <MenuItem  ><em>-</em></MenuItem> 
-            {this.props.entitiesStore.entities["truck"] ? this.props.entitiesStore.entities["truck"] .map(item=>  <MenuItem value={item.number}><em>{item.number}</em></MenuItem>): null}
+            {this.props.entitiesStore.entities["truck"] ? this.props.entitiesStore.entities["truck"].sort((a,b)=>( a.isArchive?1:0)-( b.isArchive?1:0)) .map(item=>  <MenuItem value={item.number}><em>{item.number}</em></MenuItem>): null}
              </Select>  
         </FormControl>
         </div>  

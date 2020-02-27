@@ -3,7 +3,9 @@ var Schema = mongoose.Schema;
 
 var DriverShema = new Schema({
   name: { type : String , unique : true},
-  number: { type : String }
+  number: { type : String },
+  isArchive: {type:Boolean}
+
 });
 
 
