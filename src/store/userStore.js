@@ -10,6 +10,10 @@ class userStore {
         axios.post('/auth/login', user)
             .then(this.setUser).catch(this.setError);
     }
+    // register = (user) => {
+    //     axios.post('/auth/register', user)
+    //         .then(this.setUser).catch(this.setError);
+    // }
     @action setUser = (res)=> {
         this.errors = {};
         this.user = res.data;

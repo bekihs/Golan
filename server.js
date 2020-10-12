@@ -9,8 +9,8 @@ const authRouting = require("./server/apis/authApi");
 var mongoose = require('mongoose');
 var expressSession = require('express-session');
 var passport = require('./server/models/Passport');
-// "mongodb+srv://golan:MQcalvMGEsUN16qL@goln-prod.9fywn.mongodb.net/goln-prod?retryWrites=true&w=majority"
-mongoose.connect(process.env.mongod || "mongodb+srv://golan:MQcalvMGEsUN16qL@goln-prod.9fywn.mongodb.net/goln-prod?retryWrites=true&w=majority");
+
+mongoose.connect(process.env.mongod || 'mongodb://1:Aa123456@ds127704.mlab.com:27704/golan');
 
 
 app.use(bodyParser.json({limit: '500kb'}));
