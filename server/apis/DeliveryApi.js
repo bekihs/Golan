@@ -1,212 +1,237 @@
-
+const { parse } = require('json2csv');
 var express = require('express');
-var router = express.Router(); 
+var router = express.Router();
 var Delivery = require("../models/delivery");
 
 //the '/users' routes will go here
 
-router.post('/', function(req, res, next) {   
-  if (!req.body.count){
+function ConvertToCSV(objArray) {
+  var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+  var str = '';
+
+  for (var i = 0; i < array.length; i++) {
+      var line = '';
+      for (var index in array[i]) {
+          if (line != '') line += ','
+
+          line += array[i][index];
+      }
+
+      str += line + '\r\n';
+  }
+
+  return str;
+}
+
+
+router.post('/', function (req, res, next) {
+  if (!req.body.count) {
     req.body.count = req.body.liter;
   }
 
-  Delivery.find({cerDel:req.body.cerDel} , (err,value)=>{
-    if (value && value.length > 0){
-  res.status(500).send({err:". תעודת משלוח כבר קיימת, תרצה להציג את פרטיה?" , value})
+  Delivery.find({ cerDel: req.body.cerDel }, (err, value) => {
+    if (value && value.length > 0) {
+      res.status(500).send({ err: ". תעודת משלוח כבר קיימת, תרצה להציג את פרטיה?", value })
     }
-else{
-  Delivery.create(req.body , function(err,result){
-        if (err){
+    else {
+      Delivery.create(req.body, function (err, result) {
+        if (err) {
           console.error(err);
           res.status(500).send(err);
         }
-        else{
+        else {
           res.send(result);
         }
-      })}
+      })
+    }
   })
-    
+
   // }
   // })
 
-});
-
-  
-    
-// router.get('/', function(req, res, next) {
-
-//   Delivery.find({}  , function(err,result){
-//     if (err){
-//       console.error(err);
-//       res.status(500).send(err);
-//     }
-//     else{
-//       res.send(result);
-//     }
-//   })
-//  });
- 
-     
-router.post('/get/', function(req, res, next) {
-  if (req.body.fromDate || req.body.toDate){
-    const  fromDate = req.body.fromDate ? new Date(req.body.fromDate) : new Date(1,1,1970)
-    const  toDate = req.body.toDate ? new Date(req.body.toDate) : new Date(1,1,2400)
-    req.body.date =  {"$gte": fromDate, "$lt": toDate} ;
-    req.body.fromDate = undefined;
-    req.body.toDate = undefined; 
-  }
-
-  
-  Delivery.find(req.body).sort({date: 1}).exec(function(err,result){
-    if (err){
+}); 
+router.get('/download', function (req, res, next) {
+  Delivery.find({ date: { "$gte": new Date(new Date().getFullYear()-1 , new Date().getMonth(), new Date().getDate()) } }, function (err, result) {
+    if (err) {
       console.error(err);
       res.status(500).send(err);
     }
-    else{
-      res.send(result);
-    }
-  })
-});
+    else {
+      try {
+        const csv = parse(result.map(i=>({...i._doc, liter:i.liter.toString() , count:i.count.toString(),price:i._doc.price.toString() })));
+        res.send(csv);
+      } catch (ex) {
+        console.error(ex);
+        res.status(500).send(ex);
 
-router.post('/search/milkman', function(req, res, next) {
-if (req.body.fromDate || req.body.toDate){
-  const  fromDate = req.body.fromDate ? new Date(req.body.fromDate) : new Date(1,1,1970)
-  const  toDate = req.body.toDate ? new Date(req.body.toDate) : new Date(1,1,2400)
-  req.body.date =  {"$gte": fromDate, "$lt": toDate} ;
-  req.body.fromDate = undefined;
-  req.body.toDate = undefined; 
-}
-
-const groupObj =  {
-  totalAmout: { $sum:  "$count"  },
-  totalLiter: { $sum:  "$count"  },
-  sumPrice: { $sum: { $multiply: [ "$price", "$count" ] } },
-  price: { $avg: "$price" },
-  _id: {milkman : "$milkman",isClose : "$isClose"} 
-};
- 
-req.body.grouping = undefined;
-
-  Delivery.aggregate([ { "$match":   req.body},
-  {
-    $group:groupObj
-     
-  }], function(err,result){
-    if (err){
-      console.error(err);
-      res.status(500).send(err);
-    }
-    else{ 
-      res.send(result);
-  }
- });
-});
- 
-router.post('/search/manufacturer', function(req, res, next) {
-  if (req.body.fromDate || req.body.toDate){
-    const  fromDate = req.body.fromDate ? new Date(req.body.fromDate) : new Date(1,1,1970)
-    const  toDate = req.body.toDate ? new Date(req.body.toDate) : new Date(1,1,2400)
-    req.body.date =  {"$gte": fromDate, "$lt": toDate} ;
-    req.body.fromDate = undefined;
-    req.body.toDate = undefined;
-    req.body.milkman= {$ne: "שטראוס"};
-  }
-  
-  const groupObj =  {
-    totalAmout: { $sum:  "$count"  },
-    _id: {manufacturer : "$manufacturer"} 
-  };
-   
-  req.body.grouping = undefined;
-  
-    Delivery.aggregate([ { "$match":   req.body},
-    {
-      $group:groupObj
-       
-    }], function(err,result){
-      if (err){
-        console.error(err);
-        res.status(500).send(err);
       }
-      else{
-        groupObj._id.isClose = "$isClose";
-    req.body.milkman= "שטראוס";
-  
-        Delivery.aggregate([ { "$match":   req.body  },
-        {
-          $group:groupObj
-           
-        }] , function (err , rsult2){
-          if (err){
-            console.error(err);
-            res.status(500).send(err);
-          }
-          else{ 
-            rsult2.forEach((item)=>{
-                items = result.filter((i)=>i._id.manufacturer === item._id.manufacturer);
-                if (items.length > 0){
-                  items[0]["sh"+item._id.isClose] = item.totalAmout
-                }
-                else{
-                  result.push(item);
-                  item["sh"+item._id.isClose] = item.totalAmout;
-                  item.totalAmout = 0;
-                }
-            })
-            res.send(result );
-          }
-      })}
-    })
-   });
-   
-  
-router.post('/get', function(req, res, next) {
-  if (req.body.fromDate || req.body.toDate){
-    const  fromDate = req.body.fromDate ? new Date(req.body.fromDate) : new Date(1,1,1970)
-    const  toDate = req.body.toDate ? new Date(req.body.toDate) : new Date(1,1,2400)
-    req.body,date =  {"$gte": fromDate, "$lt": toDate} ;
-    req.body.fromDate = undefined;
-    req.body.toDate = undefined;
-  }
-   
-  
-    Delivery.find( req.body  , function(err,result){
-      if (err){
-        console.error(err);
-        res.status(500).send(err);
-      }
-      else{
-        res.send([result , rsult2]);}
-    })
-   });
-   
-    
-     
-router.post('/:id', function(req, res, next) {
-
-  Delivery.findByIdAndUpdate(req.params.id,req.body , {new: true}, function(err,result){
-    if (err){
-      console.error(err);
-      res.status(500).send(err);
     }
-    else{
-      res.send(result);
-    }
-  })
- });
- 
- router.delete('/:id', function(req, res, next) {
- 
-   Delivery.findByIdAndRemove(req.params.id , function(err,result){
-     if (err){
-       console.error(err);
-       res.status(500).send(err);
-     }
-     else{
-       res.send(result);
-     }
-   })
   });
-  
-  
+});
+
+
+router.post('/get/', function (req, res, next) {
+  if (req.body.fromDate || req.body.toDate) {
+    const fromDate = req.body.fromDate ? new Date(req.body.fromDate) : new Date(1, 1, 1970)
+    const toDate = req.body.toDate ? new Date(req.body.toDate) : new Date(1, 1, 2400)
+    req.body.date = { "$gte": fromDate, "$lt": toDate };
+    req.body.fromDate = undefined;
+    req.body.toDate = undefined;
+  }
+
+
+  Delivery.find(req.body).sort({ date: 1 }).exec(function (err, result) {
+    if (err) {
+      console.error(err);
+      res.status(500).send(err);
+    }
+    else {
+      res.send(result);
+    }
+  })
+});
+
+router.post('/search/milkman', function (req, res, next) {
+  if (req.body.fromDate || req.body.toDate) {
+    const fromDate = req.body.fromDate ? new Date(req.body.fromDate) : new Date(1, 1, 1970)
+    const toDate = req.body.toDate ? new Date(req.body.toDate) : new Date(1, 1, 2400)
+    req.body.date = { "$gte": fromDate, "$lt": toDate };
+    req.body.fromDate = undefined;
+    req.body.toDate = undefined;
+  }
+
+  const groupObj = {
+    totalAmout: { $sum: "$count" },
+    totalLiter: { $sum: "$count" },
+    sumPrice: { $sum: { $multiply: ["$price", "$count"] } },
+    price: { $avg: "$price" },
+    _id: { milkman: "$milkman", isClose: "$isClose" }
+  };
+
+  req.body.grouping = undefined;
+
+  Delivery.aggregate([{ "$match": req.body },
+  {
+    $group: groupObj
+
+  }], function (err, result) {
+    if (err) {
+      console.error(err);
+      res.status(500).send(err);
+    }
+    else {
+      res.send(result);
+    }
+  });
+});
+
+router.post('/search/manufacturer', function (req, res, next) {
+  if (req.body.fromDate || req.body.toDate) {
+    const fromDate = req.body.fromDate ? new Date(req.body.fromDate) : new Date(1, 1, 1970)
+    const toDate = req.body.toDate ? new Date(req.body.toDate) : new Date(1, 1, 2400)
+    req.body.date = { "$gte": fromDate, "$lt": toDate };
+    req.body.fromDate = undefined;
+    req.body.toDate = undefined;
+    req.body.milkman = { $ne: "שטראוס" };
+  }
+
+  const groupObj = {
+    totalAmout: { $sum: "$count" },
+    _id: { manufacturer: "$manufacturer" }
+  };
+
+  req.body.grouping = undefined;
+
+  Delivery.aggregate([{ "$match": req.body },
+  {
+    $group: groupObj
+
+  }], function (err, result) {
+    if (err) {
+      console.error(err);
+      res.status(500).send(err);
+    }
+    else {
+      groupObj._id.isClose = "$isClose";
+      req.body.milkman = "שטראוס";
+
+      Delivery.aggregate([{ "$match": req.body },
+      {
+        $group: groupObj
+
+      }], function (err, rsult2) {
+        if (err) {
+          console.error(err);
+          res.status(500).send(err);
+        }
+        else {
+          rsult2.forEach((item) => {
+            items = result.filter((i) => i._id.manufacturer === item._id.manufacturer);
+            if (items.length > 0) {
+              items[0]["sh" + item._id.isClose] = item.totalAmout
+            }
+            else {
+              result.push(item);
+              item["sh" + item._id.isClose] = item.totalAmout;
+              item.totalAmout = 0;
+            }
+          })
+          res.send(result);
+        }
+      })
+    }
+  })
+});
+
+
+router.post('/get', function (req, res, next) {
+  if (req.body.fromDate || req.body.toDate) {
+    const fromDate = req.body.fromDate ? new Date(req.body.fromDate) : new Date(1, 1, 1970)
+    const toDate = req.body.toDate ? new Date(req.body.toDate) : new Date(1, 1, 2400)
+    req.body, date = { "$gte": fromDate, "$lt": toDate };
+    req.body.fromDate = undefined;
+    req.body.toDate = undefined;
+  }
+
+
+  Delivery.find(req.body, function (err, result) {
+    if (err) {
+      console.error(err);
+      res.status(500).send(err);
+    }
+    else {
+      res.send([result, rsult2]);
+    }
+  })
+});
+
+
+
+router.post('/:id', function (req, res, next) {
+
+  Delivery.findByIdAndUpdate(req.params.id, req.body, { new: true }, function (err, result) {
+    if (err) {
+      console.error(err);
+      res.status(500).send(err);
+    }
+    else {
+      res.send(result);
+    }
+  })
+});
+
+router.delete('/:id', function (req, res, next) {
+
+  Delivery.findByIdAndRemove(req.params.id, function (err, result) {
+    if (err) {
+      console.error(err);
+      res.status(500).send(err);
+    }
+    else {
+      res.send(result);
+    }
+  })
+});
+
+
 module.exports = router;

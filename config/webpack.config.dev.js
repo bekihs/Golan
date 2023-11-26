@@ -56,6 +56,9 @@ const getStyleLoaders = (cssOptions, preProcessor) => {
             },
             stage: 3,
           }),
+          require('@babel/plugin-proposal-decorators')({
+          "legacy": true
+          }),
         ],
       },
     },

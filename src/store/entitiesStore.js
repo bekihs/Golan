@@ -9,7 +9,7 @@ class entitiesStore {
     @observable searchObj = {};
     entitiesFields = {
         driver: { name: "נהג", names: "נהגים", fields: ["name", "number", "isArchive"] },
-        truck: { name: "משאית", names: "משאיות", fields: ["number" , "isArchive"] },
+        truck: { name: "משאית", names: "משאיות", fields: ["number", "isArchive"] },
         milkman: { name: "חלבן", names: "חלבנים", fields: ["name", "arrPrices"] },
         entityType: { name: "מוצר", names: "מוצרים", fields: ["name"] },
         manufacturers: { name: "יצרן", names: "יצרנים", fields: ["name", "isClose", "types"] },
@@ -27,24 +27,24 @@ class entitiesStore {
     };
 
     deleteEntity = (entity) => {
-        if(window.confirm("Are you sure you want to delete " + (entity.name || entity.number  ) + "?")){
-        axios.delete('/api/' + this.entityType + "/" + entity._id)
-            .then((result) => {
-                runInAction(() => {
-                    this.entities[this.entityType] = this.entities[this.entityType].filter((item) => item._id != entity._id)
-                })
-            }).catch(this.setError);
+        if (window.confirm("Are you sure you want to delete " + (entity.name || entity.number) + "?")) {
+            axios.delete('/api/' + this.entityType + "/" + entity._id)
+                .then((result) => {
+                    runInAction(() => {
+                        this.entities[this.entityType] = this.entities[this.entityType].filter((item) => item._id != entity._id)
+                    })
+                }).catch(this.setError);
         }
     }
 
     deleteDelivery = (entity) => {
-        if(window.confirm("Are you sure you want to delete " +  entity.cerDel + "?")){
+        if (window.confirm("Are you sure you want to delete " + entity.cerDel + "?")) {
             axios.delete('/api/delivery/' + entity._id)
-            .then((result) => {
-                runInAction(() => {
-                    this.entities["delivery"] = this.entities["delivery"].filter((item) => item._id != entity._id)
-                })
-            }).catch(this.setError);
+                .then((result) => {
+                    runInAction(() => {
+                        this.entities["delivery"] = this.entities["delivery"].filter((item) => item._id != entity._id)
+                    })
+                }).catch(this.setError);
         }
     }
 
@@ -52,12 +52,12 @@ class entitiesStore {
         axios.post("/delivery/" + entity._id, entity)
             .then((result) => {
                 runInAction(() => {
-                    if (this.entities && this.entities["delivery"]){
-                    this.entities["delivery"] = this.entities["delivery"]
-                        .map((item) => item._id === entity._id ? result.data : item);
+                    if (this.entities && this.entities["delivery"]) {
+                        this.entities["delivery"] = this.entities["delivery"]
+                            .map((item) => item._id === entity._id ? result.data : item);
                     }
                 })
-            }) 
+            })
     }
     createDelivery = (entity) => {
 
@@ -65,9 +65,9 @@ class entitiesStore {
             .then((result) => {
                 this.entities["delivery"].push(result.data)
                 return null;
-            }) 
-            .catch((err)=>{
-                throw(err.response.data);
+            })
+            .catch((err) => {
+                throw (err.response.data);
             })
     }
     editEntity = (entity) => {
@@ -89,22 +89,22 @@ class entitiesStore {
             }).catch(this.setError);
     }
 
-    searchDeliveriesEntities=(entity)=>{
-        axios.post("/delivery/get" , entity)
-        .then((result) => {
-            runInAction(() => {
+    searchDeliveriesEntities = (entity) => {
+        axios.post("/delivery/get", entity)
+            .then((result) => {
+                runInAction(() => {
 
-                this.entities["delivery"] = result.data;
-                this.deliveriseSum = [0, 0, 0];
-                result.data.forEach((i)=>{
-                
-                    this.deliveriseSum[0] += parseFloat(i.count["$numberDecimal"]);
-                    this.deliveriseSum[1] += parseFloat(i.liter["$numberDecimal"]);
-                    this.deliveriseSum[2] +=( parseFloat(i.price["$numberDecimal"]) * parseFloat(i.count["$numberDecimal"]));
+                    this.entities["delivery"] = result.data;
+                    this.deliveriseSum = [0, 0, 0];
+                    result.data.forEach((i) => {
+
+                        this.deliveriseSum[0] += parseFloat(i.count["$numberDecimal"]);
+                        this.deliveriseSum[1] += parseFloat(i.liter["$numberDecimal"]);
+                        this.deliveriseSum[2] += (parseFloat(i.price["$numberDecimal"]) * parseFloat(i.count["$numberDecimal"]));
+                    })
+
                 })
-
-            })
-        }).catch(this.setError);
+            }).catch(this.setError);
     }
     @action setEntityType = (entityName) => {
         this.entityType = entityName;
@@ -123,17 +123,22 @@ class entitiesStore {
     @action setError = (err) => {
         this.errors = { message: err.response ? err.response.data.message : err.data, stack: err.stack };
     }
+
+    downloadExcel = () => {
+        return axios.get("/delivery/download");
+
+    }
     searchDeliveries = (entity) => {
         this.shtraosDeliveries = [];
         this.deliveries = [];
 
         axios.post("/delivery/search/" + entity.grouping, entity)
             .then((result) => {
-                runInAction(() => { 
+                runInAction(() => {
                     this.shtraosDeliveries = [];
                     if (entity.grouping === "milkman") {
                         const arr = [];
-                        this.deliveriseSum = ["-",0, 0, 0]
+                        this.deliveriseSum = ["-", 0, 0, 0]
                         result.data.forEach(item => {
                             if (item._id.milkman === "שטראוס") {
                                 if (!item._id.isClose) {
@@ -169,7 +174,7 @@ class entitiesStore {
                         this.deliveriseSum = [0, 0, 0]
                         result.data.forEach(item => {
                             this.sumColumns["manufacturer"].forEach((key, i) => {
-                                    this.deliveriseSum[i] +=item[key]? parseFloat(item[key]["$numberDecimal"]):0;
+                                this.deliveriseSum[i] += item[key] ? parseFloat(item[key]["$numberDecimal"]) : 0;
                             });
                         });
                     }
