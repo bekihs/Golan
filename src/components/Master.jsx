@@ -43,7 +43,8 @@ class Master extends React.Component {
       const outputFilename = `${Date.now()}.xls`;
 
       // If you want to download file automatically using link attribute.
-      const url = URL.createObjectURL(new Blob([response.data]));
+      // const url = URL.createObjectURL(new Blob([response.data]));
+      const url="data:text/csv;charset=utf-8,%EF%BB%BF"+encodeURI(response.data)
       const link = document.createElement('a');
       link.href = url;
       link.setAttribute('download', outputFilename);
